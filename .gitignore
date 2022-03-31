@@ -1,0 +1,13 @@
+# Latex
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.dvi
+*.pdf
+*.run.xml
+*.toc
+*-blx.bib
+paper/*.log
+*.kate-swp
+
