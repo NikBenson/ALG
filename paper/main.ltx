@@ -4,6 +4,7 @@
 \usepackage[T1]{fontenc}
 \usepackage[ngerman]{babel}
 \usepackage{hyphenat}
+\usepackage{listings}
 
 \usepackage{geometry}
 \geometry{a4paper, margin=1in}
@@ -11,6 +12,38 @@
 
 \usepackage[backend=biber,style=apa]{biblatex}
 \bibliography{bibliography}
+
+\usepackage{listings}
+\renewcommand{\lstlistingname}{Abbildung}
+\renewcommand{\lstlistlistingname}{Liste der \lstlistingname en}
+
+\usepackage{xcolor}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{c}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\lstset{style=c}
 
 \author{Nik Benson (202123513)}
 \title{Samplesort}
@@ -31,21 +64,13 @@
 
 	\tableofcontents
 	\newpage
+	\lstlistoflistings
 	
-	\section{Einleitung}
-	
-	\subsection{Sortierproblematik}
-	Schon seit den ersten Computerprogrammen sind Sortiralgorithmen ein wichtiger bestandteil. Aber auch schon davor waren sie in der Theoretischen Informatik relevant.
-	\paragraph{Bestandteile eines Sortieralgorithmus}
-	
-	\newpage
-	
-	
-	\include{history}
-	%\include{implementation}
-	%\include{space-time-complexity}
-	%\include{varriants}
-	%\include{conclusion}
+	\include{introduction}
+	\include{implementation}
+	\include{space-time-complexity}
+	\include{varriants}
+	\include{conclusion}
 
 	\printbibliography
 \end{document}

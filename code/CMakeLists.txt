@@ -3,4 +3,4 @@ project(code C)
 
 set(CMAKE_C_STANDARD 99)
 
-add_executable(code main.c)
+add_executable(code main.c quicksort.c quicksort.h samplesort.c samplesort.h)
