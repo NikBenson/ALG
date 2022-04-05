@@ -3,22 +3,35 @@
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage[ngerman]{babel}
+\usepackage[ngerman=ngerman-x-latest]{hyphsubst}
 \usepackage{hyphenat}
+\usepackage{xspace}
 \usepackage{listings}
 
 \usepackage{geometry}
 \geometry{a4paper, margin=1in}
 
 
-\usepackage[backend=biber,style=apa]{biblatex}
+\usepackage[backend=biber,style=iso-authoryear]{biblatex}
 \bibliography{bibliography}
 
 \usepackage{listings}
 \renewcommand{\lstlistingname}{Abbildung}
 \renewcommand{\lstlistlistingname}{Liste der \lstlistingname en}
 
-\usepackage{xcolor}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    filecolor=blue,      
+    urlcolor=blue,
+    pdftitle={Samplesort},
+    pdfauthor={Nik Benson}
+    pdfpagemode=FullScreen,
+    }
+\urlstyle{same}
 
+\usepackage{xcolor}
 \definecolor{codegreen}{rgb}{0,0.6,0}
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
 \definecolor{codepurple}{rgb}{0.58,0,0.82}
@@ -49,22 +62,15 @@
 \title{Samplesort}
 
 \begin{document}
-    \begin{titlepage}
-        \maketitle
-        \vspace{2cm}
-        \input{abstract}
-        \vspace*{\fill}
-        \begin{flushleft}
-            \Large{\textbf{Institution:} Westf\"alische Hochschule}\\
-            \Large{\textbf{Modul:} Algorithmen und Datenstrukturen Seminar} \\
-            \Large{\textbf{Pr\"ufer:} Prof. Dr. Martin Guddat}\\
-            \Large{\textbf{Semester:} SoSe 2022}
-        \end{flushleft}
-    \end{titlepage}
+    \pagenumbering{gobble}
+    \include{title}
 
+    \pagenumbering{Roman}
 	\tableofcontents
 	\newpage
 	\lstlistoflistings
+	\newpage
+	\pagenumbering{arabic}
 	
 	\include{introduction}
 	\include{implementation}

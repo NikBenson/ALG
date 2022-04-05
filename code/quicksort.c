@@ -1,38 +1,33 @@
 #include "quicksort.h"
 
-void swap(int *firstOperand, int *secondOperand) {
-    int temp = *firstOperand;
+#define Swap(X,Y)  do{ __typeof__ (X) _T = X; X = Y; Y = _T; }while(0)
 
-    *firstOperand = *secondOperand;
-    *secondOperand = temp;
-}
-
-int *divide(int *left, int *right) {
-    int *i = left;
-    int *j = right - 1;
-    int pivot = *right;
+int *divide(void *left, void *right, comparator compare) {
+    void *i = left;
+    void *j = right - 1;
+    void* pivot = right;
 
     while (i < j) {
-        while (i < right && *i < pivot)
+        while (i < right && compare(i, pivot) < 0)
             i++;
 
-        while (j > left && *j >= pivot)
+        while (j > left && compare(j, pivot) >= 0)
             j--;
 
         if (i < j)
-            swap(i, j);
+            Swap(i, j);
     }
 
-    if (*i > pivot)
-        swap(i, right);
+    if (compare(i, pivot)> 0)
+        Swap(i, right);
 
     return i;
 }
 
-void quicksort(int *left, int *right) {
+void quicksort(void *left, void *right, comparator compare) {
     if (left < right) {
-        int *pivot = divide(left, right);
-        quicksort(left, pivot - 1);
-        quicksort(pivot + 1, right);
+        int *pivot = divide(left, right, compare);
+        quicksort(left, pivot - 1, compare);
+        quicksort(pivot + 1, right, compare);
     }
 }

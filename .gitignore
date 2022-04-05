@@ -11,4 +11,5 @@
 paper/*.log
 *.kate-swp
 *.lol
+*.out
 
