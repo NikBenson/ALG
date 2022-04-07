@@ -1,5 +1,7 @@
 \begin{abstract}
-    Mit dem Quatären Wirtschaftssektor, auch Datensektor genannt, werden Daten und derren haushalt immer wichtiger. Die wenigsten Unternehmen haben heutzutage noch nie etwas von Big Data oder dem Data Warehouse gehört.\\
-    Aber desto mehr Daten verarbeitet werden, desto wichtiger ist es auch, dass effiziente Algorithmen verwendet werden. Wenn wir von eienm Effizienten Sortieralgorithmius sprechen wir in der Regel, wenn dieser eine durchschnittliche Laufzeitkomplexität von $O(n\log n)$ hat. \autocite{sedgewick-1996} Dies ist beim Samplesort nicht der Fall. Allerdings erreichen andere Algorithmen, wie Quick- und Mergesort, diese Laufzeitkomplexität lediglich bei randomisierten Datensätzen. Im falle von vorsortierten Datensätzen schneidet Samplesort in der Praxis häufig besser ab.\\
-    In diesem Artikel ist die literatur seit der veröfffentlichung des Whitepapers \autocite{frazer-1970} bis heute zusammengeführt, um die Frage zu beantworten, wann Samplesort am besten ein zu setzten ist, welche Problematiken er am besten löst und wann besser auf klassische Ansätze zurrückgegriffen wird.
+    Mit dem Wachstums des Quat\"aren Wirtschaftssektor, auch Datensektor genannt, werden Daten und derren Haushalt immer wichtiger. Für die meisten dieser Unternehmen sind heutzutage Big Data oder das Data Warehouse wichtige Themen.\\
+    Aber desto mehr Daten verarbeitet werden, desto wichtiger ist es auch, dass effiziente Algorithmen verwendet werden. Vergleichsbasierte Sortieralgorithmen haben eine theoretische optimale Laufzeit von $O(n\log{n})$. Dem kommen Algorithmen wie der Ouicksort mit einer eben solchen durchschnittlichen Laufzeit auch sehr nahe, im schlechtesten Falle ist es beim Beispiel des Quicksorts allerdings $O(n^2)$.\\
+    Hier schafft Samplesort \autocite{frazer-1970} abhilfe, indem die Daten randomisiert werden.\\
+    Dies ist gerade bei vorsortierten Datens\"atzen ein wichtiger Vorteil.
+    Im Folgenden ist dargestellt, wie Samplesort in verschiedenen Varrianten funktioniert und wann es sinnvoll ist, diesen zu nutzen.
 \end{abstract}
