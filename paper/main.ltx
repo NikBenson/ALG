@@ -11,7 +11,6 @@
 \usepackage{geometry}
 \geometry{a4paper, margin=1in}
 
-
 \usepackage[backend=biber,style=iso-authoryear]{biblatex}
 \bibliography{bibliography}
 
@@ -68,6 +67,7 @@
     \pagenumbering{Roman}
 	\tableofcontents
 	\newpage
+	\addcontentsline{toc}{section}{Liste der Abbildungen}
 	\lstlistoflistings
 	\newpage
 	\pagenumbering{arabic}
@@ -78,5 +78,6 @@
 	\include{space-time-complexity}
 	\include{conclusion}
 
+	\addcontentsline{toc}{section}{Quellenverzeichnis}
 	\printbibliography
 \end{document}
