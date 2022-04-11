@@ -1,17 +1,31 @@
 \section{Implementierung}
-Rekursive Implementierung...
-Definition Bucket, Splitter, ...
+Es gibt viele verschiedene Varriationen, Samplesort zu implementieren. Zu viele, um sie hier alle zu nennen.
+Im Folgenden sind die bekanntesten Varriationen dargestellt.\\
+Dazu sind zun\"achst ein paar Grundbegriffe von n\"oten:
+\paragraph{Splitter}
+Splitter wurden bereits in der Einleitung erwähnt.
+Dort haben wir uns damit begn\"ugt, diese mit den Pivot Elementen beim Quicksort zu vergleichen.
+Die Konzepte sind dabei sehr \"ahnlich.\\
+W\"arend Quicksort die Daten mit dem Pivot Element in 2 Sektionen unterteilt, da bin\"ar die einfachste aufteilungsm\"oglichkeit ist, wenn die Anzahl irrelevant ist, unterteilt Samplesort die Daten mit $n$ Splittern in $n+1$ Buckets.
+\paragraph{Bucket}
+Ein Bucket ist der bereich zwischen zwei benachbarten Splittern, so wie die beiden bereiche neben dem gr\"oßten sowie kleinsten Splitter.\\
+Wenn $\{10, 20, 30\}$ die 3 Splitter sind, dann ergeben sich daraus also die Buckets $\{(-\infty;10],\allowbreak [10;20],\allowbreak [20;30],\allowbreak [30;\infty)\}$.\\
+Wichtig ist dabei, dass Elemente, die den selben Wert, wie ein Splitter haben, entweder in den Bucket links, oder rechts, von jenem, eingeordnet werden k\"onnen.\\
+Das Ziel ist dabei h\"aufig, die Anzahl der Buckets identisch zur Anzahl der verf\"ugbaren Prozessorkerne zu setzen, damit die Buckets parallel sortiert werden. Dies ist in \ref{sec:multithreading} weiter ausgef\"uhrt.
 
-\lstinputlisting[language=C, caption=Samplesort Implementierung]{../code/samplesort.c}
-
-\subsection{Rekursionsanker}
+\subsection{Grundger\"ust}
+Der grundlegende Aufbau ist dabei immer identisch und in \ref{fig:skeletton} zu erkennen.
+\lstinputlisting[language=C, caption=Samplesort Implementierung, label=fig:skeletton]{../code/samplesort.c}
 
 \subsection{Auswahl der Splitter}
-\lstinputlisting[language=C, caption=Auswahlverfahren der Splitter]{../code/select_splitters.c}
 
-\subsubsection{Was ist Oversampeling}
+\subsubsection{Oversampeling}
+
+\lstinputlisting[language=C, caption=Auswahlverfahren der Splitter, label=fig:select_splitters_bloc]{../code/select_splitters.c}
 
 \subsection{Zuordnen jeden Wertes zu dem passenden Bucket}
 \lstinputlisting[language=C, caption=Finden des richtigen Buckets]{../code/find_bucket_index_for_value_by_binary_search.c}
 
-\subsection{Rekursion}
+\subsection{Sortieren der Buckets}
+\subsubsection{Original}
+\subsubsection{Rekursiv}
