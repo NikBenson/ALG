@@ -1,31 +1,51 @@
 \section{Implementierung}
-Es gibt viele verschiedene Varriationen, Samplesort zu implementieren. Zu viele, um sie hier alle zu nennen.
-Im Folgenden sind die bekanntesten Varriationen dargestellt.\\
-Dazu sind zun\"achst ein paar Grundbegriffe von n\"oten:
-\paragraph{Splitter}
-Splitter wurden bereits in der Einleitung erwähnt.
-Dort haben wir uns damit begn\"ugt, diese mit den Pivot Elementen beim Quicksort zu vergleichen.
-Die Konzepte sind dabei sehr \"ahnlich.\\
-W\"arend Quicksort die Daten mit dem Pivot Element in 2 Sektionen unterteilt, da bin\"ar die einfachste aufteilungsm\"oglichkeit ist, wenn die Anzahl irrelevant ist, unterteilt Samplesort die Daten mit $n$ Splittern in $n+1$ Buckets.
-\paragraph{Bucket}
-Ein Bucket ist der bereich zwischen zwei benachbarten Splittern, so wie die beiden bereiche neben dem gr\"oßten sowie kleinsten Splitter.\\
-Wenn $\{10, 20, 30\}$ die 3 Splitter sind, dann ergeben sich daraus also die Buckets $\{(-\infty;10],\allowbreak [10;20],\allowbreak [20;30],\allowbreak [30;\infty)\}$.\\
-Wichtig ist dabei, dass Elemente, die den selben Wert, wie ein Splitter haben, entweder in den Bucket links, oder rechts, von jenem, eingeordnet werden k\"onnen.\\
-Das Ziel ist dabei h\"aufig, die Anzahl der Buckets identisch zur Anzahl der verf\"ugbaren Prozessorkerne zu setzen, damit die Buckets parallel sortiert werden. Dies ist in \ref{sec:multithreading} weiter ausgef\"uhrt.
+	Es gibt viele verschiedene Variationen, Samplesort zu implementieren. Zu viele, um sie hier alle zu nennen.
+	Im Folgenden sind die bekanntesten Variationen dargestellt.\\
+	Dazu sind zunächst ein paar Grundbegriffe von Nöten:
+	\paragraph{Splitter}
+		Splitter wurden bereits in der Einleitung erwähnt.
+		Dort haben wir uns damit begnügt, diese mit den Pivot Elementen beim Quicksort zu vergleichen.
+		Die Konzepte sind dabei sehr ähnlich.\\
+		Während Quicksort die Daten mit dem Pivot Element in 2 Sektionen unterteilt, da binär die einfachste Aufteilungsmöglichkeit ist, wenn die Anzahl irrelevant ist, unterteilt Samplesort die Daten mit $n$ Splittern in $n+1$ Buckets.
+	\paragraph{Bucket}
+		Ein Bucket ist der Bereich zwischen zwei benachbarten Splittern, so wie die beiden Bereiche neben dem größten sowie kleinsten Splitter.\\
+		Wenn $\{10, 20, 30\}$ die 3 Splitter sind, dann ergeben sich daraus also die Buckets $\{(-\infty;10],\allowbreak [10;20],\allowbreak [20;30],\allowbreak [30;\infty)\}$.\\
+		Wichtig ist dabei, dass Elemente, die den selben Wert, wie ein Splitter haben, entweder in den Bucket links, oder rechts, von jenem, eingeordnet werden können.\\
+		Das Ziel ist dabei häufig, die Anzahl der Buckets identisch zur Anzahl der verfügbaren Prozessorkerne zu setzen, damit die Buckets parallel sortiert werden. Dies ist in \ref{sec:multithreading} weiter ausgeführt.
 
-\subsection{Grundger\"ust}
-Der grundlegende Aufbau ist dabei immer identisch und in \ref{fig:skeletton} zu erkennen.
-\lstinputlisting[language=C, caption=Samplesort Implementierung, label=fig:skeletton]{../code/samplesort.c}
+	\subsection{Grundger\"ust}
+		Der grundlegende Aufbau ist dabei immer identisch und in \ref{fig:skeletton} beispielhaft dargestellt:
+		\lstinputlisting[language=C, caption=Samplesort Implementierung, label=fig:skeletton]{../code/src/samplesort/samplesort.c}
+		Zu erkennen sind 3 schritte, denen im folgenden auch jeweils eine Überschrift gewidmet ist:
+		\begin{enumerate}
+			\item Auswählen von $\textit{bucketsCount}-1$ splittern
+			\item Zuordnen der Werte zu den sich daraus ergebenden Buckets
+			\item Sortieren der Buckets
+		\end{enumerate}
+		Der Datentyp \textit{Array}, der zu sortierenden Daten \textit{data}, ist gegeben als ein Addressbereich im RAM mit einem \textit{start} und einem \textit{end} Pointer.
 
-\subsection{Auswahl der Splitter}
+	\subsection{Auswahl der Splitter}
+		
+	\subsubsection{Oversampeling}
 
-\subsubsection{Oversampeling}
+		%\lstinputlisting[language=C, caption=Auswahlverfahren der Splitter, label=fig:select_splitters_bloc]{../code/select_splitters.c}
 
-\lstinputlisting[language=C, caption=Auswahlverfahren der Splitter, label=fig:select_splitters_bloc]{../code/select_splitters.c}
+	\subsection{Zuordnen jeden Wertes zu dem passenden Bucket}
+		%\lstinputlisting[language=C, caption=Finden des richtigen Buckets]{../code/find_bucket_index_for_value_by_binary_search.c}
 
-\subsection{Zuordnen jeden Wertes zu dem passenden Bucket}
-\lstinputlisting[language=C, caption=Finden des richtigen Buckets]{../code/find_bucket_index_for_value_by_binary_search.c}
-
-\subsection{Sortieren der Buckets}
-\subsubsection{Original}
-\subsubsection{Rekursiv}
+	\subsection{Sortieren der Buckets}
+		Um den Sortierprozess fertig zu stellen ist es noch notwendig, alle Buckets zu sortieren.
+		Zu diesem Zweck gibt es 2 Überkategorien:
+		\subsubsection{Original}
+			Im Original \autocite{frazer-1970} wird Quicksort verwendet, um die Buckets zu sortieren.
+			Der zugrundeliegende Gedanke ist, dass, durch das initiale gleichmäßige verteilen der Elemente, jeder Prozessorkern nun annähernd gleich viele Elemente bearbeiten soll.\\
+			Auch wenn im Original Quicksort verwendet wird, so wird dieser Gedanke auch von jeglichem Divide-and-Conquer Algorithmus mit einer durchschnittlichen Laufzeit von annähernd $O(n\log{n})$\footnote{Diese Angabe ist ein Richtwert. Vorausgesetzt es gibt sinnvolle Gründe, wie das verringern von Vergleichen, kann es sinnvoll sein, diese Laufzeitkomplexität auch im größeren Maße zu überschreiten.} umgesetzt. 
+		\subsubsection{Rekursiv}
+			Dem entgegen steht die rekursive Implementierung.
+			Diese ist auch in \ref{fig:skeletton} umgesetzt.\\
+			Hier ist der Vorteil der geringen Anzahl an Vergleichen von Samplesort länger gegeben. Als Rekursionsanker dient in der Regel ein Threshold.
+			Überschreitet die durchschnittliche Größe eines Buckets diese Zahl, so wird zu einem alternativen Sortieralgorithmus gewechselt. \\
+			Hier bietet sich Insertion an, da dieser für kleine Datenmengen optimal ist. \autocite{geeksforgeeks-2021} 
+			In vielen Ausführungen ist hier allerdings auch ein Quicksort zu finden.
+			Die Entscheidung sollte von der Größe des Thresholds getrieben sein.
+			

@@ -14,3 +14,5 @@ paper/*.log
 *.out
 *.ps
 *.@@@
+*.DS_Store
+**/.texpadtmp/**/**.*
