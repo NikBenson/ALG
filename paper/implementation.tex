@@ -25,13 +25,40 @@
 		Der Datentyp \textit{Array}, der zu sortierenden Daten \textit{data}, ist gegeben als ein Addressbereich im RAM mit einem \textit{start} und einem \textit{end} Pointer.
 
 	\subsection{Auswahl der Splitter}
+		Das Ziel bei der Auswahl der Splitter ist, dass möglichst gleich große Buckets entstehen.
+		\lstinputlisting[language=C, caption=Auswahl der Splitter, label=fig:select_splitters]{../code/src/samplesort/select_splitters.c}
+		Während der grundlegende Aufbau, wie in \ref{fig:select_splitters} dargestellt, immer der selbe ist, kann die Auswahl der Sample auf 4 verschiedene Arten erfolgen:
+		\begin{itemize}
+			\item \ref{sec:even} Gleichmäßig
+			\item \ref{sec:semi-random} Semi-Zufällig
+			\item \ref{sec:random} Zufällig
+			\item \ref{sec:block} Block
+		\end{itemize}
 		
-	\subsubsection{Oversampeling}
+		\paragraph{Oversampeling}
+			Die Sample ist dabei ein ausgewählter Teilbereich der Daten. Der \textit{oversamplingFactor} gibt dabei an, wie wie groß die Sample ist.\\
+			Die Sample wird sortiert und die Splitter werden gleichmäßig aus der Sample entnommen.
+			Dieser Prozess dient dazu, dass die Splitter die Buckets möglichst gleichmäßig unterteilen.
+			
+		\subsubsection{Gleichmäßig}
+			\label{sec:even}
+			pick evenly spaced samples using a step of l/s, where l is the number of elements on the thread
 
-		%\lstinputlisting[language=C, caption=Auswahlverfahren der Splitter, label=fig:select_splitters_bloc]{../code/select_splitters.c}
+		\subsubsection{Semi-Zufällig}
+			\label{sec:semi-random}
+			pick approximately evenly spaced samples using a step of a random number between 1 and l/s
+
+		\subsubsection{Zufällig}
+			\label{sec:random}
+			pick the samples randomly from the data on the thread
+
+		\subsubsection{Block}
+			\label{sec:block}
+			pick the sequential first s data elements on the thread
+			\lstinputlisting[language=C, caption=Auswahl der Sample mit dem Block Verfahren, label=fig:select_sample_bloc]{../code/src/samplesort/choose_sample/block.c}
 
 	\subsection{Zuordnen jeden Wertes zu dem passenden Bucket}
-		%\lstinputlisting[language=C, caption=Finden des richtigen Buckets]{../code/find_bucket_index_for_value_by_binary_search.c}
+		\lstinputlisting[language=C, caption=Finden des richtigen Buckets]{../code/src/samplesort/place_elements_in_appropriate_bucket.c}
 
 	\subsection{Sortieren der Buckets}
 		Um den Sortierprozess fertig zu stellen ist es noch notwendig, alle Buckets zu sortieren.
