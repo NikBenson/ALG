@@ -1,14 +1,14 @@
 \section{Einleitung}
-    Samplesort ist ein Vergleichsbasierter Sortieralgorithmus, der 1970 zuerst vorgestellt wurde. \autocite{frazer-1970}
-    Dabei ist Samplesort für große Datenmengen ausgelegt, bei denen andere Algorithmen, wie z. B. Quicksort, durch eine bereits vorhandene Teilsortierung, nicht performant sind.
-    Auch ist Samplesort besonders effizient darin, viele Prozessorkerne möglichst effizient aus zu nutzen.
-    Aus diesem Grund findet er vor allem in hoch Skalierten Systemen, mit vielen Daten, Anwendung.\\
-    Damit findet er, auch wenn er über 50 Jahre alt ist, heute noch häufiger Anwendung.
-    Mit der Zeit gab es allerdings viele Optimierungen und Abweichungen vom Original.
-    Im Folgenden ist die Zugrundeliegende Sortierproblematik für die verschiedenen Anwendungsfälle differenzieren und darstellen, wie Samplesort funktioniert, wann seine Vorteile die anderer Algorithmen übertreffen und welche Variationen wann am besten sind.
+	Samplesort ist ein Vergleichsbasierter, In-Place, Sortieralgorithmus, der 1970 zuerst vorgestellt wurde. \autocite{frazer-1970}
+	Dabei ist Samplesort eine Generalisierung des Quicksort und für große Datenmengen ausgelegt, bei denen andere Algorithmen, wie z. B. der klassische Quicksort oder Insertion Sort, durch eine bereits vorhandene Teilsortierung, nicht performant sind.
+	Auch ist Samplesort besonders effizient darin, viele Prozessorkerne möglichst effizient aus zu nutzen.
+	Aus diesem Grund findet er vor allem in hoch Skalierten Systemen, mit vielen Daten, Anwendung.\\
+	Damit findet er, auch wenn er über 50 Jahre alt ist, heute noch häufiger Anwendung.
+	Mit der Zeit gab es allerdings viele Optimierungen und Abweichungen vom Original.
+	Im Folgenden ist die Zugrundeliegende Sortierproblematik für die verschiedenen Anwendungsfälle differenzieren und darstellen, wie Samplesort funktioniert, wann seine Vorteile die anderer Algorithmen übertreffen und welche Variationen wann am besten sind.
 	\subsection{Sortierproblematik}
 		Schon seit Anbeginn der Theoretischen Informatik sind Sortieralgorithmen weit diskutiert.
-		Heute sind viele verschiedene Algorithmen bekannt, um verschiedene Anreiungen von Daten, auf die unterschiedlichsten Arten zu sortieren.
+		Heute sind viele verschiedene Algorithmen bekannt, um verschiedene Anreihungen von Daten, auf die unterschiedlichsten Arten zu sortieren.
 		Eine Eigenschaft hat sich dabei besonders herausgestellt, und so wird im Folgenden nur Bezug auf vergleichsbasierte Sortieralgorithmen genommen.\footnote{Nicht vergleichsbasierte Sortieralgorithmen sind mit klassischer Hardware nicht umsetzbar und in der Regel Algorithmen für Hardwarekomponenten. So ist für Integer auch eine Laufzeit von $O(n)$ möglich. \autocite{abdel-hafeez-2017}}
 		Diese müssen ein Minimum von $n\log{n}$ Vergleichen durchführen, um jedes Element eindeutig einordnen zu können, und haben damit eine minimale Laufzeitkomplexität von $\Omega(n\log{n})$.\footnote{$O(f(x))$ ist die maximal begrenzte, $\Omega(f(x))$ die minimal begrenzte und $\Theta(f(x))$ die übereinstimmende maximal und minimal begrenzte Laufzeit. $O$, $\Omega$ und $\Theta$ beschreiben dabei einen konstanten Faktor. \autocite[4]{sedgewick-1996}}
 	
@@ -21,13 +21,12 @@
 			Aber auch ob der Algorithmus \textbf{stabil} ist, also die ursprüngliche Reihenfolge gleichwertiger Elemente gewährleistet ist, können eine Rolle spielen.\\
 			
 
-    \subsection{Was ist Samplesort?}
-    	Bei all diesen Kriterien schneidet Quicksort im Schnitt am besten ab, stößt aber auch schnell an seine Grenzen. Sind die Daten in umgekehrter sortierter Reihenfolge vorhanden, so steigert sich seine Laufzeit von durchschnittlich $O(n\log{n})$ auf $\Omega(n^2)$.\\
-    	Dieser Fall erscheint zunächst selten, doch wenn zum Beispiel neue Nutzerdaten jeden Tag um Mitternacht neu in eine strukturierte Datenbank übernommen werden sollen, ist dies häufig der Fall.\\
-    	Heapsort kann hier, mit einer Laufzeit von $\Theta(n\log{n})$ Abhilfe schaffen, ist aber im Schnitt langsamer als Quicksort.\\
-    	Samplesort ist eine Generalisierung von Quicksort:\\
-    	Während Quicksort ein Pivot Element hat, hat Samplesort $p$ Pivot Elemente, auch Splitter genannt, wobei diese zufällig ausgewählt werden.
-    	Dadurch benötigt Samplesort im Schnitt 15\% weniger Vergleiche als Quicksort. \autocite{frazer-1970}
-    	Außerdem ist Samplesort für Systeme mit mehreren Prozessorkernen ausgelegt.
-    	So wird $p$ meistens als die Anzahl von Kernen - 1 definiert und durch die zufällige Auswahl der Splitter hat jeder Kern eine annähernd identische Last und der Algorithmus kann den vollen Prozessor nutzen, um schneller fertig zu werden.
-    
+	\subsection{Was ist Samplesort?}
+		Bei all diesen Kriterien schneidet Quicksort im Schnitt am besten ab, stößt aber auch schnell an seine Grenzen. Sind die Daten in umgekehrter sortierter Reihenfolge vorhanden, so steigert sich seine Laufzeit von durchschnittlich $O(n\log{n})$ auf $\Omega(n^2)$.\\
+		Dieser Fall erscheint zunächst selten, doch wenn zum Beispiel neue Nutzerdaten jeden Tag um Mitternacht neu in eine strukturierte Datenbank übernommen werden sollen, ist dies häufig der Fall.\\
+		Heapsort kann hier, mit einer Laufzeit von $\Theta(n\log{n})$ Abhilfe schaffen, ist aber im Schnitt langsamer als Quicksort.\\
+		Samplesort ist eine Generalisierung von Quicksort:\\
+		Während Quicksort ein Pivot Element hat, hat Samplesort $p$ Pivot Elemente, auch Splitter genannt, wobei diese zufällig ausgewählt werden.
+		Dadurch benötigt Samplesort im Schnitt 15\% weniger Vergleiche als Quicksort. \autocite{frazer-1970}
+		Außerdem ist Samplesort für Systeme mit mehreren Prozessorkernen ausgelegt.
+		So wird $p$ meistens als die Anzahl von Kernen - 1 definiert und durch die zufällige Auswahl der Splitter hat jeder Kern eine annähernd identische Last und der Algorithmus kann den vollen Prozessor nutzen, um schneller fertig zu werden.\\

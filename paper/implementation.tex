@@ -22,40 +22,57 @@
 			\item Zuordnen der Werte zu den sich daraus ergebenden Buckets
 			\item Sortieren der Buckets
 		\end{enumerate}
-		Der Datentyp \textit{Array}, der zu sortierenden Daten \textit{data}, ist gegeben als ein Addressbereich im RAM mit einem \textit{start} und einem \textit{end} Pointer.
+		Diese Phasen lassen sich 1:1 auf den klassischen Quicksort abbilden:
+		\begin{enumerate}
+			\item Wählen des Pivot Elements
+			\item Kleinere Elemente links, größere Elemente rechts des Pivot Elements positionieren
+			\item Bereiche links und rechts des Pivot Elements sortieren
+		\end{enumerate}
+		
 
 	\subsection{Auswahl der Splitter}
 		Das Ziel bei der Auswahl der Splitter ist, dass möglichst gleich große Buckets entstehen.
 		\lstinputlisting[language=C, caption=Auswahl der Splitter, label=fig:select_splitters]{../code/src/samplesort/select_splitters.c}
-		Während der grundlegende Aufbau, wie in \ref{fig:select_splitters} dargestellt, immer der selbe ist, kann die Auswahl der Sample auf 4 verschiedene Arten erfolgen:
+		Während der grundlegende Aufbau, wie in \ref{fig:select_splitters} dargestellt, immer der selbe ist, kann die Auswahl der Sample auf 4 verschiedene Arten erfolgen:\footnote{Sortiert von schnellster Laufzeit zu größter Randomisierung} \autocite{berlin-2007}
 		\begin{itemize}
+			\item \ref{sec:block} Block
 			\item \ref{sec:even} Gleichmäßig
 			\item \ref{sec:semi-random} Semi-Zufällig
 			\item \ref{sec:random} Zufällig
-			\item \ref{sec:block} Block
 		\end{itemize}
 		
-		\paragraph{Oversampeling}
-			Die Sample ist dabei ein ausgewählter Teilbereich der Daten. Der \textit{oversamplingFactor} gibt dabei an, wie wie groß die Sample ist.\\
+		\paragraph{Oversampling}
+			Die Sample ist dabei ein ausgewählter Teilbereich der Daten. Der \textit{oversamplingFactor} gibt dabei an, wie wie groß die Sample ist, in der Form $\textit{sampleSize}=\textit{splittersCount}\cdot\textit{oversamplingFactor}$.\\
 			Die Sample wird sortiert und die Splitter werden gleichmäßig aus der Sample entnommen.
 			Dieser Prozess dient dazu, dass die Splitter die Buckets möglichst gleichmäßig unterteilen.
-			
+
+		\subsubsection{Block}
+			\label{sec:block}
+			\lstinputlisting[language=C, caption=Auswahl der Sample mit dem Block Verfahren, label=fig:select_sample_bloc]{../code/src/samplesort/choose_sample/block.c}
+			Hier besteht die Sample aus den ersten Elementen der zu sortierenden Daten.
+			Da hier kein zusätzlicher Aufwand betrieben wird, ist diese Variante mit einer Laufzeit von $O(0)$ am schnellsten.
+			Allerdings ist hier das Risiko dafür, dass die Buckets entarten, also deutlich unterschiedlich groß werden, das höchste.
+
 		\subsubsection{Gleichmäßig}
 			\label{sec:even}
-			pick evenly spaced samples using a step of l/s, where l is the number of elements on the thread
+			\lstinputlisting[language=C, caption=Auswahl der Sample in gleichmäßigen Schritten, label=fig:select_sample_even]{../code/src/samplesort/choose_sample/even.c}
+			Bei diesem Verfahren werden gleich verteilt Elemente aus den Daten gewählt, in dem jedes $\textit{dataLength}/\textit{sampleLength}$-te Element der Sample hinzugefügt wird.\\
+			Mit einer Laufzeit von $O(n)$ ist dieses Verfahren schneller als zufällige Verfahren, da keine zufälligen Zahlen generiert werden müssen.
+			Auch werden sowohl bei zufälligen, als auch bei vollständig sortierten Daten, passende Splitter gefunden.
+			Allerdings entfällt das Zufallselement, was den Algorithmus anfälliger für bestimmte vorhandene Strukturen macht.
+			Das Risiko zu entarten ist allerdings in den meisten Anwendungsfällen nicht relevant.
+			Deshalb ist dies die häufigste Implementierung.
 
 		\subsubsection{Semi-Zufällig}
 			\label{sec:semi-random}
-			pick approximately evenly spaced samples using a step of a random number between 1 and l/s
+			\lstinputlisting[language=C, caption=Auswahl der Sample Semi-Zufällig, label=fig:select_sample_semi-random]{../code/src/samplesort/choose_sample/semi_random.c}
+			Diese Methode ergänzt die Schrittweite von \ref{sec:even} um einen zufälligen Faktor.
+			Entsprechend ähnlich ist die Laufzeit mit $O(n)+O_R$, wobei R die Berechnung einer Zufallszahl ist.
+			Auch wenn das Ausmaß der Entartung verringert wird, so ist diese Implementierung für die selben Muster anfällig wie \ref{sec:even} und wenn dieser schlecht funktioniert empfiehlt es sich, \ref{sec:random} zu verwenden.
 
 		\subsubsection{Zufällig}
 			\label{sec:random}
 			pick the samples randomly from the data on the thread
-
-		\subsubsection{Block}
-			\label{sec:block}
-			pick the sequential first s data elements on the thread
-			\lstinputlisting[language=C, caption=Auswahl der Sample mit dem Block Verfahren, label=fig:select_sample_bloc]{../code/src/samplesort/choose_sample/block.c}
 
 	\subsection{Zuordnen jeden Wertes zu dem passenden Bucket}
 		\lstinputlisting[language=C, caption=Finden des richtigen Buckets]{../code/src/samplesort/place_elements_in_appropriate_bucket.c}
@@ -70,9 +87,9 @@
 		\subsubsection{Rekursiv}
 			Dem entgegen steht die rekursive Implementierung.
 			Diese ist auch in \ref{fig:skeletton} umgesetzt.\\
-			Hier ist der Vorteil der geringen Anzahl an Vergleichen von Samplesort länger gegeben. Als Rekursionsanker dient in der Regel ein Threshold.
+			Hier ist der Vorteil der geringen Anzahl an Vergleichen von Samplesort länger gegeben. Als Rekursionsanker dient in der Regel ein Schwellenwert (\textit{Threshold}).
 			Überschreitet die durchschnittliche Größe eines Buckets diese Zahl, so wird zu einem alternativen Sortieralgorithmus gewechselt. \\
-			Hier bietet sich Insertion an, da dieser für kleine Datenmengen optimal ist. \autocite{geeksforgeeks-2021} 
+			Hier bietet sich Insertion Sort an, da dieser für kleine Datenmengen optimal ist. \autocite{geeksforgeeks-2021} 
 			In vielen Ausführungen ist hier allerdings auch ein Quicksort zu finden.
-			Die Entscheidung sollte von der Größe des Thresholds getrieben sein.
+			Die Entscheidung sollte von der Größe des Schwellenwerts getrieben sein.
 			
