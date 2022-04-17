@@ -15,7 +15,7 @@
 
 	\subsection{Grundger\"ust}
 		Der grundlegende Aufbau ist dabei immer identisch und in \ref{fig:skeletton} beispielhaft dargestellt:
-		\lstinputlisting[language=C, caption=Samplesort Implementierung, label=fig:skeletton]{../code/src/samplesort/samplesort.c}
+		\lstinputlisting[language=C, caption={Samplesort Implementierung \autocite{benson-2022}}, label=fig:skeletton]{../code/src/samplesort/samplesort.c}
 		Zu erkennen sind 3 schritte, denen im folgenden auch jeweils eine Überschrift gewidmet ist:
 		\begin{enumerate}
 			\item Auswählen von $\textit{bucketsCount}-1$ splittern
@@ -32,7 +32,7 @@
 
 	\subsection{Auswahl der Splitter}
 		Das Ziel bei der Auswahl der Splitter ist, dass möglichst gleich große Buckets entstehen.
-		\lstinputlisting[language=C, caption=Auswahl der Splitter, label=fig:select_splitters]{../code/src/samplesort/select_splitters.c}
+		\lstinputlisting[language=C, caption={Auswahl der Splitter \autocite{benson-2022}}, label=fig:select_splitters]{../code/src/samplesort/select_splitters.c}
 		Während der grundlegende Aufbau, wie in \ref{fig:select_splitters} dargestellt, immer der selbe ist, kann die Auswahl der Sample auf 4 verschiedene Arten erfolgen:\footnote{Sortiert von schnellster Laufzeit zu größter Randomisierung} \autocite{berlin-2007}
 		\begin{itemize}
 			\item \ref{sec:block} Block
@@ -48,14 +48,14 @@
 
 		\subsubsection{Block}
 			\label{sec:block}
-			\lstinputlisting[language=C, caption=Auswahl der Sample mit dem Block Verfahren, label=fig:select_sample_bloc]{../code/src/samplesort/choose_sample/block.c}
+			\lstinputlisting[language=C, caption={Auswahl der Sample mit dem Block Verfahren \autocite{benson-2022}}, label=fig:select_sample_bloc]{../code/src/samplesort/choose_sample/block.c}
 			Hier besteht die Sample aus den ersten Elementen der zu sortierenden Daten.
 			Da hier kein zusätzlicher Aufwand betrieben wird, ist diese Variante mit einer Laufzeit von $O(0)$ am schnellsten.
 			Allerdings ist hier das Risiko dafür, dass die Buckets entarten, also deutlich unterschiedlich groß werden, das höchste.
 
 		\subsubsection{Gleichmäßig}
 			\label{sec:even}
-			\lstinputlisting[language=C, caption=Auswahl der Sample in gleichmäßigen Schritten, label=fig:select_sample_even]{../code/src/samplesort/choose_sample/even.c}
+			\lstinputlisting[language=C, caption={Auswahl der Sample in gleichmäßigen Schritten \autocite{benson-2022}}, label=fig:select_sample_even]{../code/src/samplesort/choose_sample/even.c}
 			Bei diesem Verfahren werden gleich verteilt Elemente aus den Daten gewählt, in dem jedes $\textit{dataLength}/\textit{sampleLength}$-te Element der Sample hinzugefügt wird.\\
 			Mit einer Laufzeit von $O(n)$ ist dieses Verfahren schneller als zufällige Verfahren, da keine zufälligen Zahlen generiert werden müssen.
 			Auch werden sowohl bei zufälligen, als auch bei vollständig sortierten Daten, passende Splitter gefunden.
@@ -65,7 +65,7 @@
 
 		\subsubsection{Semi-Zufällig}
 			\label{sec:semi-random}
-			\lstinputlisting[language=C, caption=Auswahl der Sample Semi-Zufällig, label=fig:select_sample_semi-random]{../code/src/samplesort/choose_sample/semi_random.c}
+			\lstinputlisting[language=C, caption={Auswahl der Sample Semi-Zufällig \autocite{benson-2022}}, label=fig:select_sample_semi-random]{../code/src/samplesort/choose_sample/semi_random.c}
 			Diese Methode ergänzt die Schrittweite von \ref{sec:even} um einen zufälligen Faktor.
 			Entsprechend ähnlich ist die Laufzeit mit $O(n)+O_R$, wobei R die Berechnung einer Zufallszahl ist.
 			Auch wenn das Ausmaß der Entartung verringert wird, so ist diese Implementierung für die selben Muster anfällig wie \ref{sec:even} und wenn dieser schlecht funktioniert empfiehlt es sich, \ref{sec:random} zu verwenden.
@@ -75,7 +75,7 @@
 			pick the samples randomly from the data on the thread
 
 	\subsection{Zuordnen jeden Wertes zu dem passenden Bucket}
-		\lstinputlisting[language=C, caption=Finden des richtigen Buckets]{../code/src/samplesort/place_elements_in_appropriate_bucket.c}
+		\lstinputlisting[language=C, caption={Finden des richtigen Buckets \autocite{benson-2022}}, label=fig:place_elements_in_appropriate_bucket]{../code/src/samplesort/place_elements_in_appropriate_bucket.c}
 
 	\subsection{Sortieren der Buckets}
 		Um den Sortierprozess fertig zu stellen ist es noch notwendig, alle Buckets zu sortieren.
