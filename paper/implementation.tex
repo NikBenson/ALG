@@ -72,11 +72,18 @@
 
 		\subsubsection{Zufällig}
 			\label{sec:random}
-			\lstinputlisting[language=C, caption={Auswahl der Sample Zufällig \autocite{benson-2022}}, label=fig:select_sample_random]{../code/src/samplesort/choose_sample/random.h}
+			\lstinputlisting[language=C, caption={Auswahl der Sample Zufällig \autocite{benson-2022}}, label=fig:select_sample_random]{../code/src/samplesort/choose_sample/random.c}
 			Mit dieser Implementierung wird durch eine vollständig zufällige Auswahl die vollständige Unabhängigkeit von den zu sortierenden Daten gewährleistet.\\
 			Im durchschnitt werden so genau die mittleren Splitter, die versucht werden, möglichst genau zu treffen, gefunden.
-			 Entsprechend ist hier die Standardabweichung der Elemente von $\sqrt{\frac{\displaystyle\sum_{i=1}^n(i-\frac{n}{2})^2}{n-1}}\equiv\frac{\sqrt{\frac{n^3+2n}{n-1}}}{2\sqrt{3}}\approx n$ relevant.\footnote{Zur vereinfachten Darstellung wird angenommen, dass alle Elemente einzigartig sind.}
+			 Allerdings, dadurch, dass dies vom Zufall abhängig ist, ist dies, abgesehen vom Oversampling, auch nur im Durchschnitt, der Fall.\\
+			 Durch das Oversampling ist die Wahrscheinlichkeit, dass annähernd optimale Splitter ausgewählt werden, vorausgesetzt, es gibt nicht zu viele Duplikate, allerdings ziemlich hoch\\%TODO find maths
+			 Auch steigt die Laufzeit auf $O(n\cdot O_R)$.\\
 			 
+			 \paragraph{Equality buckets}
+			 	Gibt es zu viele, nicht einzigartige, Elemente, so wird die Auswahl der optimalen Splitter, nicht nur bei einer zufälligen Wahl, proportional unzuverlässiger.
+			 	Hierzu können Equality Buckets genutzt werden.
+			 	Dabei bildet jeder Splitter einen eigenen Bucket, der alle Elemente fasst, die einen identischen Wert haben.\\
+			 	Desto mehr Duplikate es gibt, desto wahrscheinlicher ist, dass ein solches Duplikat als Splitter gewählt wird.
 
 	\subsection{Zuordnen jeden Wertes zu dem passenden Bucket}
 		\lstinputlisting[language=C, caption={Finden des richtigen Buckets \autocite{benson-2022}}, label=fig:place_elements_in_appropriate_bucket]{../code/src/samplesort/place_elements_in_appropriate_bucket.c}
