@@ -5,6 +5,9 @@ int *divide_data_from_pivot(Array data, void *pivot, Comparator compare) {
     void *i = data.start;
     void *j = data.end - 1;
 
+    Swap(pivot, data.end);
+    pivot = data.end;
+
     while (i < j) {
         while (i < data.end && compare(i, pivot) < 0)
             i++;

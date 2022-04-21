@@ -1,18 +1,13 @@
 #include "samplesort.h"
-#include "../quicksort/quicksort.h"
-#include "../compare_int_pointers.h"
 #include "select_splitters.h"
-#include "choose_sample/block.h"
-#include "place_elements_in_appropriate_bucket.h"
+#include "place_elements_in_corresponding_bucket.h"
 
-void sampleSort(Array data, unsigned int oversamplingFactor, unsigned int bucketsCount, unsigned int threshold) {
-    unsigned int averageBucketSize = arrayLength(data) / oversamplingFactor;
-    if (averageBucketSize < threshold)
-        return quicksort(data, (Comparator) compareIntPointers);
+void sampleSort(Array data, SampleSortConfiguration configuration) {
+    unsigned int averageBucketSize = arrayLength(data) / configuration.oversamplingFactor;
+    if (averageBucketSize < configuration.threshold)
+        return configuration.smallSort(data, configuration.compare);
 
-    Array splitter = selectSplitters(data, bucketsCount - 1, oversamplingFactor, chooseSampleByBlock);
+    Array splitter = selectSplitters(data, configuration);
 
-    Array splitterPositions = placeElementsInAppropriateBucket(data, splitter);
-
-    sampleSort((Array) {data.start, *(void **) splitterPositions.start}, oversamplingFactor, bucketsCount, threshold);
+    placeElementsInCorrespondingBucketAndSortBuckets(data, splitter, configuration);
 }

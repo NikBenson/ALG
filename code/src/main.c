@@ -1,13 +1,15 @@
 #include <stdio.h>
 #include <stdbool.h>
-#include <malloc.h>
+#include <stdlib.h>
 #include "samplesort/samplesort.h"
 #include "compare_int_pointers.h"
+#include "quicksort/quicksort.h"
+#include "samplesort/choose_sample/even.h"
 
 #define ARR_LENGTH 8500
 
 void traverseArray(const Array array, void(*fn)(void *value)) {
-    for (void* element = array.start; element <= array.end; ++element)
+    for (void *element = array.start; element <= array.end; ++element)
         fn(element);
 }
 
@@ -39,7 +41,13 @@ void checkIfSorted(int *current) {
 int main() {
     Array numbers = readNumbersFromStdIn(ARR_LENGTH);
 
-    samplesort(numbers, compareIntPointers, 1, 5, 5);
+    sampleSort(numbers,
+               (SampleSortConfiguration) {1,
+                                          5,
+                                          5,
+                                          quicksort,
+                                          (Comparator) compareIntPointers,
+                                          chooseSampleEven});
 
     traverseArray(numbers, (void (*)(void *)) &checkIfSorted);
     printf("\b\b\n%s\n", isSorted ? "SUCCESS" : "FAILED");
