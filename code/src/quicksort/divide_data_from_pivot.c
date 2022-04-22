@@ -1,7 +1,7 @@
 #include "divide_data_from_pivot.h"
 #include "../swap.h"
 
-int *divide_data_from_pivot(Array data, void *pivot, Comparator compare) {
+int *divideDataFromPivot(Array data, void *pivot, Comparator compare) {
     void *i = data.start;
     void *j = data.end - 1;
 
