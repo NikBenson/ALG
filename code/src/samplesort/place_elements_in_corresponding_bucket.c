@@ -1,10 +1,9 @@
 #include <stdbool.h>
 #include "place_elements_in_corresponding_bucket.h"
-#include "../swap.h"
 #include "../quicksort/divide_data_from_pivot.h"
+#include "configuration.h"
 
-Array
-placeElementsInCorrespondingBucketAndSortBuckets(Array data, Array splitters, SampleSortConfiguration configuration) {
+void placeElementsInCorrespondingBucketAndSortBuckets(Array data, Array splitters, SampleSortConfiguration configuration) {
     void *middleSplitter = splitters.start + ((splitters.end - splitters.start) / 2);
 
     bool hasLeft = middleSplitter >= splitters.start;
@@ -16,23 +15,27 @@ placeElementsInCorrespondingBucketAndSortBuckets(Array data, Array splitters, Sa
     for (int i = 0; i < arrayLength(splitters); ++i) {
         void *splitter = splitters.start + i;
         void *targetPosition = splitter;
-        if (splitter < middleSplitter) {
+        if (configuration.compare(splitter, middleSplitter) < 1) {
             targetPosition = data.start + i;
         } else if (splitter > middleSplitter) {
             targetPosition = data.end - (splitters.end - middleSplitter) + i;
         }
-        Swap(splitter, targetPosition);
+        configuration.swap(splitter, targetPosition);
     }
 
     middleSplitter = divideDataFromPivot((Array) {leftSplitters.end + 1, rightSplitters.start - 1}, middleSplitter,
-                                         configuration.compare);
+                                         configuration.compare, configuration.swap);
 
+    Array leftData = {data.start, middleSplitter - 1};
     if (hasLeft)
-        placeElementsInCorrespondingBucketAndSortBuckets((Array) {data.start, middleSplitter - 1}, leftSplitters,
-                                                         configuration);
-    if (hasRight)
-        placeElementsInCorrespondingBucketAndSortBuckets((Array) {middleSplitter + 1, data.end}, rightSplitters,
-                                                         configuration);
+        placeElementsInCorrespondingBucketAndSortBuckets(leftData, leftSplitters, configuration);
+    else
+        sampleSort(leftData, configuration);
 
-    // TODO(nbenson): sort
+    Array rightData = {middleSplitter + 1, data.end};
+    if (hasRight)
+        placeElementsInCorrespondingBucketAndSortBuckets(rightData, rightSplitters, configuration);
+    else
+        sampleSort(rightData, configuration);
+
 }

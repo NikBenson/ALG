@@ -4,7 +4,7 @@
 #include "../array.h"
 #include "choose_sample/choose_sample.h"
 #include "../comparator.h"
-#include "samplesort.h"
+#include "configuration.h"
 
 Array selectSplitters(Array data, SampleSortConfiguration configuration);
 

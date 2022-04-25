@@ -1,11 +1,10 @@
 #include "divide_data_from_pivot.h"
-#include "../swap.h"
 
-int *divideDataFromPivot(Array data, void *pivot, Comparator compare) {
+void *divideDataFromPivot(Array data, void *pivot, Comparator compare, Swapper swap) {
     void *i = data.start;
     void *j = data.end - 1;
 
-    Swap(pivot, data.end);
+    swap(pivot, data.end);
     pivot = data.end;
 
     while (i < j) {
@@ -16,11 +15,11 @@ int *divideDataFromPivot(Array data, void *pivot, Comparator compare) {
             j--;
 
         if (i < j)
-            Swap(i, j);
+            swap(i, j);
     }
 
     if (compare(i, pivot) > 0)
-        Swap(i, data.end);
+        swap(i, data.end);
 
     return i;
 }

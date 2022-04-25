@@ -3,6 +3,7 @@
 
 #include "../array.h"
 #include "../comparator.h"
+#include "../swap.h"
 
-int *divideDataFromPivot(Array data, void* pivot, Comparator compare);
+void *divideDataFromPivot(Array data, void* pivot, Comparator compare, Swapper swap);
 #endif //CODE_DIVIDE_DATA_FROM_PIVOT_H

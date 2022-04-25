@@ -5,15 +5,8 @@
 #include "../comparator.h"
 #include "../sort.h"
 #include "choose_sample/choose_sample.h"
-
-typedef struct SampleSortConfiguration {
-    unsigned int oversamplingFactor;
-    unsigned int splittersCount;
-    unsigned int threshold;
-    Sort smallSort;
-    Comparator compare;
-    ChooseSample sampler;
-} SampleSortConfiguration;
+#include "../swap.h"
+#include "configuration.h"
 
 void sampleSort(Array data, SampleSortConfiguration configuration);
 
