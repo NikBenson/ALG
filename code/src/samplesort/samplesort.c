@@ -5,7 +5,7 @@
 void sampleSort(Array data, SampleSortConfiguration configuration) {
     unsigned int averageBucketSize = arrayLength(data) / configuration.oversamplingFactor;
     if (averageBucketSize < configuration.threshold)
-        return configuration.smallSort(data, configuration.compare);
+        return configuration.smallSort(data, configuration.compare, configuration.swap);
 
     Array splitter = selectSplitters(data, configuration);
 

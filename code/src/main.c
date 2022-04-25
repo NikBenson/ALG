@@ -3,22 +3,22 @@
 #include <stdlib.h>
 #include "samplesort/samplesort.h"
 #include "int_tools.h"
-#include "quicksort/divide_data_from_pivot.h"
 #include "quicksort/quicksort.h"
+#include "samplesort/choose_sample/even.h"
 
-#define ARR_LENGTH 20
+#define ARR_LENGTH 5
 
-void traverseArray(const Array array, void (*fn)(const void *value)) {
-    for (void *element = array.start; element <= array.end; ++element)
+void traverseArray(const Array array, void (*fn)(const int *value)) {
+    for (int *element = array.start; element <= array.end; ++element)
         fn(element);
 }
 
 Array readNumbersFromStdIn(unsigned int maxSize) {
     int *first = calloc(maxSize, sizeof(int));
-    for (int *number = first; number < first + maxSize; ++number) {
-        int result = scanf("%d ", number);
+    for (int i = 0; i < maxSize; ++i) {
+        int result = scanf(" %d ", first + i);
         if (result == EOF)
-            return (Array) {first, number - 1};
+            return (Array) {first, first + i - 1};
     }
     return (Array) {first, first + maxSize - 1};
 }
@@ -26,15 +26,15 @@ Array readNumbersFromStdIn(unsigned int maxSize) {
 bool isSorted = true;
 const int *lastNumber = NULL;
 
-void printNumbers(const void *current) {
-    printf("%d, ", *(int *) current);
+void printNumbers(const int *current) {
+    printf("%d, ", *current);
 }
 
-void checkIfSorted(const void *current) {
+void checkIfSorted(const int *current) {
     printNumbers(current);
 
     if (lastNumber != NULL) {
-        if (*lastNumber > *(int *) current)
+        if (*lastNumber > *current)
             isSorted = false;
     }
     lastNumber = current;
@@ -42,28 +42,18 @@ void checkIfSorted(const void *current) {
 
 int main() {
     Array numbers = readNumbersFromStdIn(ARR_LENGTH);
-    numbers.end = numbers.start + 2;
-    ((int*)numbers.start)[0] = 1;
-    ((int*)numbers.start)[1] = 17;
-    ((int*)numbers.start)[2] = 4;
-    ((int*)numbers.start)[3] = 12;
-    ((int*)numbers.start)[4] = 3;
 
     traverseArray(numbers, printNumbers);
     printf("\b\b\n");
 
-    /*sampleSort(numbers,
+    sampleSort(numbers,
                (SampleSortConfiguration) {1,
-                                          5,
-                                          5,
+                                          2,
+                                          1,
                                           quicksort,
-                                          (Comparator) compareIntPointers,
-                                          chooseSampleEven});*/
-
-
-    //divideDataFromPivot(numbers, numbers.end, compareIntPointers, swapInts);
-
-    quicksort(numbers, compareIntPointers, swapInts);
+                                          compareIntPointers,
+                                          swapInts,
+                                          chooseSampleEven});
 
     traverseArray(numbers, checkIfSorted);
     printf("\b\b\n%s\n", isSorted ? "SUCCESS" : "FAILED");

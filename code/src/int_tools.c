@@ -1,16 +1,16 @@
 #include "int_tools.h"
 
-int compareIntPointers(const void *a, const void *b) {
-    if (*(int*)a == *(int*)b)
+int compareIntPointers(const int *a, const int *b) {
+    if (*a == *b)
         return 0;
-    else if (*(int*)a > *(int*)b)
+    else if (*a > *b)
         return 1;
     else
         return -1;
 }
 
-void swapInts(void* a, void* b) {
-    int temp = *(int*) a;
-    *(int*)a = *(int*)b;
-    *(int*)b = temp;
+void swapInts(int *a, int *b) {
+    int temp = *a;
+    *a = *b;
+    *b = temp;
 }

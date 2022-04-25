@@ -5,5 +5,5 @@
 #include "../comparator.h"
 #include "../swap.h"
 
-void *divideDataFromPivot(Array data, void* pivot, Comparator compare, Swapper swap);
+int *divideDataFromPivot(Array data, void* pivot, Comparator compare, Swapper swap);
 #endif //CODE_DIVIDE_DATA_FROM_PIVOT_H

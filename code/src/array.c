@@ -1,5 +1,11 @@
 #include "array.h"
 
-unsigned int arrayLength(Array array) {
-    return array.end - array.start;
+unsigned long arrayLength(Array array) {
+    long length = 1 + (array.end - array.start);
+
+    if(length < 0) {
+        return 0;
+    }
+
+    return length;
 }

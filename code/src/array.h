@@ -2,10 +2,10 @@
 #define CODE_ARRAY_H
 
 typedef struct Array {
-    void *start;
-    void *end;
+    int *start;
+    int *end;
 } Array;
 
-unsigned int arrayLength(Array array);
+unsigned long arrayLength(Array array);
 
 #endif //CODE_ARRAY_H

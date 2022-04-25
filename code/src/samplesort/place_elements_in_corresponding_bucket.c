@@ -3,37 +3,31 @@
 #include "../quicksort/divide_data_from_pivot.h"
 #include "configuration.h"
 
-void placeElementsInCorrespondingBucketAndSortBuckets(Array data, Array splitters, SampleSortConfiguration configuration) {
-    void *middleSplitter = splitters.start + ((splitters.end - splitters.start) / 2);
+void
+placeElementsInCorrespondingBucketAndSortBuckets(Array data, Array splitters, SampleSortConfiguration configuration) {
+    int *middleSplitter = splitters.start + ((splitters.end - splitters.start) / 2);
 
-    bool hasLeft = middleSplitter >= splitters.start;
-    bool hasRight = middleSplitter <= splitters.end;
-
+    bool hasLeftSplitters = middleSplitter != splitters.start;
     Array leftSplitters = {data.start, data.start + (middleSplitter - splitters.start)};
+    for (int *splitter = splitters.start, *target = data.start; splitter < middleSplitter; ++splitter, ++target) {
+        configuration.swap(splitter, target);
+    }
+    bool hasRightSplitters = middleSplitter != splitters.end;
     Array rightSplitters = {data.end - (splitters.end - middleSplitter), data.end};
-
-    for (int i = 0; i < arrayLength(splitters); ++i) {
-        void *splitter = splitters.start + i;
-        void *targetPosition = splitter;
-        if (configuration.compare(splitter, middleSplitter) < 1) {
-            targetPosition = data.start + i;
-        } else if (splitter > middleSplitter) {
-            targetPosition = data.end - (splitters.end - middleSplitter) + i;
-        }
-        configuration.swap(splitter, targetPosition);
+    for (int *splitter = splitters.end, *target = data.end; splitter > middleSplitter; --splitter, --target) {
+        configuration.swap(splitter, target);
     }
 
-    middleSplitter = divideDataFromPivot((Array) {leftSplitters.end + 1, rightSplitters.start - 1}, middleSplitter,
-                                         configuration.compare, configuration.swap);
+    middleSplitter = divideDataFromPivot((Array) {leftSplitters.end + 1, rightSplitters.start - 1}, middleSplitter, configuration.compare, configuration.swap);
 
     Array leftData = {data.start, middleSplitter - 1};
-    if (hasLeft)
+    if (hasLeftSplitters)
         placeElementsInCorrespondingBucketAndSortBuckets(leftData, leftSplitters, configuration);
     else
         sampleSort(leftData, configuration);
 
     Array rightData = {middleSplitter + 1, data.end};
-    if (hasRight)
+    if (hasRightSplitters)
         placeElementsInCorrespondingBucketAndSortBuckets(rightData, rightSplitters, configuration);
     else
         sampleSort(rightData, configuration);
