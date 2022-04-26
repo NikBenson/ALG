@@ -4,14 +4,10 @@
 #include "samplesort/samplesort.h"
 #include "int_tools.h"
 #include "quicksort/quicksort.h"
-#include "samplesort/choose_sample/even.h"
+#include "samplesort/select_splitters.h"
+#include "samplesort/choose_sample/random.h"
 
-#define ARR_LENGTH 5
-
-void traverseArray(const Array array, void (*fn)(const int *value)) {
-    for (int *element = array.start; element <= array.end; ++element)
-        fn(element);
-}
+#define ARR_LENGTH 1000000
 
 Array readNumbersFromStdIn(unsigned int maxSize) {
     int *first = calloc(maxSize, sizeof(int));
@@ -25,11 +21,6 @@ Array readNumbersFromStdIn(unsigned int maxSize) {
 
 bool isSorted = true;
 const int *lastNumber = NULL;
-
-void printNumbers(const int *current) {
-    printf("%d, ", *current);
-}
-
 void checkIfSorted(const int *current) {
     printNumbers(current);
 
@@ -41,21 +32,26 @@ void checkIfSorted(const int *current) {
 }
 
 int main() {
+    srandomdev();
+
     Array numbers = readNumbersFromStdIn(ARR_LENGTH);
 
-    traverseArray(numbers, printNumbers);
-    printf("\b\b\n");
+    printArray(numbers);
 
-    sampleSort(numbers,
-               (SampleSortConfiguration) {1,
-                                          2,
-                                          1,
-                                          quicksort,
-                                          compareIntPointers,
-                                          swapInts,
-                                          chooseSampleEven});
+    SampleSortConfiguration configuration = {
+            2,
+            3,
+            6,
+            quicksort,
+            compareIntPointers,
+            swapInts,
+            chooseSampleRandom,
+            };
+
+    sampleSort(numbers, configuration);
 
     traverseArray(numbers, checkIfSorted);
+
     printf("\b\b\n%s\n", isSorted ? "SUCCESS" : "FAILED");
 
     return 0;

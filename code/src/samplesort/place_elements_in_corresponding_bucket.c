@@ -8,28 +8,33 @@ placeElementsInCorrespondingBucketAndSortBuckets(Array data, Array splitters, Sa
     int *middleSplitter = splitters.start + ((splitters.end - splitters.start) / 2);
 
     bool hasLeftSplitters = middleSplitter != splitters.start;
-    Array leftSplitters = {data.start, data.start + (middleSplitter - splitters.start)};
+    Array leftSplitters = {data.start, data.start + (middleSplitter - splitters.start) - 1};
     for (int *splitter = splitters.start, *target = data.start; splitter < middleSplitter; ++splitter, ++target) {
         configuration.swap(splitter, target);
     }
     bool hasRightSplitters = middleSplitter != splitters.end;
-    Array rightSplitters = {data.end - (splitters.end - middleSplitter), data.end};
+    Array rightSplitters = {data.end - (splitters.end - middleSplitter) + 1, data.end};
     for (int *splitter = splitters.end, *target = data.end; splitter > middleSplitter; --splitter, --target) {
         configuration.swap(splitter, target);
     }
 
-    middleSplitter = divideDataFromPivot((Array) {leftSplitters.end + 1, rightSplitters.start - 1}, middleSplitter, configuration.compare, configuration.swap);
+    middleSplitter = divideDataFromPivot((Array) {leftSplitters.end + 1, rightSplitters.start - 1}, middleSplitter,
+                                         configuration.compare, configuration.swap);
 
     Array leftData = {data.start, middleSplitter - 1};
-    if (hasLeftSplitters)
-        placeElementsInCorrespondingBucketAndSortBuckets(leftData, leftSplitters, configuration);
-    else
-        sampleSort(leftData, configuration);
+    if (arrayLength(leftData) > 1) {
+        if (hasLeftSplitters)
+            placeElementsInCorrespondingBucketAndSortBuckets(leftData, leftSplitters, configuration);
+        else
+            sampleSort(leftData, configuration);
+    }
 
     Array rightData = {middleSplitter + 1, data.end};
-    if (hasRightSplitters)
-        placeElementsInCorrespondingBucketAndSortBuckets(rightData, rightSplitters, configuration);
-    else
-        sampleSort(rightData, configuration);
+    if (arrayLength(rightData) > 1) {
+        if (hasRightSplitters)
+            placeElementsInCorrespondingBucketAndSortBuckets(rightData, rightSplitters, configuration);
+        else
+            sampleSort(rightData, configuration);
+    }
 
 }

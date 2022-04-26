@@ -5,7 +5,7 @@ Array chooseSampleSemiRandom(Array data, unsigned int sampleLength, Swapper swap
     unsigned int maxSteps = arrayLength(data) / sampleLength;
     unsigned int steps = (random() % maxSteps) + 1;
 
-    for (int i = 0; i < arrayLength(data); ++i) {
+    for (int i = 0; i < sampleLength; ++i) {
         int *targetPosition = data.start + i;
         int *initialPosition = data.start + i * steps;
         swap(targetPosition, initialPosition);

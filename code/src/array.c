@@ -1,3 +1,4 @@
+#include <printf.h>
 #include "array.h"
 
 unsigned long arrayLength(Array array) {
@@ -8,4 +9,18 @@ unsigned long arrayLength(Array array) {
     }
 
     return length;
+}
+
+void printArray(const Array array) {
+    traverseArray(array, printNumbers);
+    printf("\b\b\n");
+}
+
+void traverseArray(const Array array, void (*fn)(const int *value)) {
+    for (int *element = array.start; element <= array.end; ++element)
+        fn(element);
+}
+
+void printNumbers(const int *current) {
+    printf("%d, ", *current);
 }

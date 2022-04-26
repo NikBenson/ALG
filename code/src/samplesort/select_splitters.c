@@ -1,7 +1,7 @@
 #include "select_splitters.h"
 
 Array selectSplitters(Array data, SampleSortConfiguration configuration) {
-    Array sample = configuration.sampler(data, configuration.oversamplingFactor * (configuration.splittersCount - 1), configuration.swap);
+    Array sample = configuration.sampler(data, configuration.oversamplingFactor * configuration.splittersCount, configuration.swap);
     configuration.smallSort(sample, configuration.compare, configuration.swap);
 
     unsigned int sampleLength = arrayLength(sample);
