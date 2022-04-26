@@ -88,7 +88,16 @@
 			 	Desto mehr Duplikate es gibt, desto wahrscheinlicher ist, dass ein solches Duplikat als Splitter gewählt wird.
 
 	\subsection{Zuordnen jeden Wertes zu dem passenden Bucket}
-		\lstinputlisting[language=C, caption={Finden des richtigen Buckets \autocite{benson-2022}}, label=fig:place_elements_in_appropriate_bucket]{../code/src/samplesort/place_elements_in_appropriate_bucket.c}
+		\lstinputlisting[language=C, caption={Finden des richtigen Buckets \autocite{benson-2022}}, label=fig:place_elements_in_appropriate_bucket]{../code/src/samplesort/place_elements_in_corresponding_bucket.c}
+		An der Länge des Beispiels alleine ist zu erkennen, dass dies der aufwändigste schritt ist.
+		Dies liegt daran, dass es keinen Algorithmus gibt, der in einer Iteration, alle Splitter richtig positioniert.
+		Entsprechend müssen die Daten wiederholt an einem Splitter, analog zum Quicksort, verteilt werden.\\
+		In \ref{fig:place_elements_in_appropriate_bucket} wird hier zu ein Rekursiver Ansatz gewählt.
+		Es sind aber auch imperative Ansätze denkbar.\\
+		Ein wichtiges Detail ist, die in-place Architektur beizubehalten.
+		Hierzu werden die Splitter als erstes an die beiden Enden der Daten aufgeteilt, bevor der Bereich dazwischen aufgeteilt wird.
+		Daraus ergibt sich, dass von der Mitte der Splitter nach außen gearbeitet wird.\\
+		Daraus ergeben sich $n\log_2s$ vergleiche so wie Austausch Operationen, was einer Laufzeitkomplexität von $\Theta(n\log{s})$ entspricht.\footnote{$n$ ist die Anzahl der Elemente und $s$ die Anzahl der Splitter}
 
 	\subsection{Sortieren der Buckets}
 		Um den Sortierprozess fertig zu stellen ist es noch notwendig, alle Buckets zu sortieren.
