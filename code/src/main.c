@@ -5,7 +5,7 @@
 #include "int_tools.h"
 #include "quicksort/quicksort.h"
 #include "samplesort/select_splitters.h"
-#include "samplesort/choose_sample/random.h"
+#include "samplesort/choose_sample/even.h"
 
 #define ARR_LENGTH 1000000
 
@@ -39,13 +39,13 @@ int main() {
     printArray(numbers);
 
     SampleSortConfiguration configuration = {
-            2,
-            3,
-            6,
+            128,
+            8,
+            8*128,
             quicksort,
             compareIntPointers,
             swapInts,
-            chooseSampleRandom,
+            chooseSampleEven,
             };
 
     sampleSort(numbers, configuration);

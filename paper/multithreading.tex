@@ -1,4 +1,28 @@
 \section{Multithreading}\label{sec:multithreading}
+	Aus Gründen der Komplexität ist zum Thema Multithreading kein Codebeispiel aufgeführt.
+	Allerdings ist die Thematik nicht zu vernachlässigen, da Samplesort besonders performant in diesem Kontext ist.
 	
 	\subsection{Ziele}
+		Mit modernen technischen Geräten sind mehrere Prozessoren zum Standard geworden.
+		Damit müssen Vergleichsbasierte Sortieralgorithmen nicht mehr eine minimale Laufzeit von $\Omega(n\log{n})$ haben, die Last kann aufgeteilt werden.
+		Daraus ergibt sich das Ziel, eine Laufzeit von $\Omega\left(\frac{n}{p}\log{n}\right)$ zu erreichen.
+		Das ist der Punkt, an dem der Vorteil von Samplesort greift:\\
+		Ist die Bucket Expansion, also die Differenz der Anzahl der Elemente im größten Bucket zu der optimalen Bucket Größe, hinreichend gering, so hat jeder Thread, ein Prozess, der auf einem Prozessor läuft, einen hinreichend identisch großen Datensatz zu sortieren.
+		Also $\underset{e\to 1}{\overline\lim}\ \Omega\left(\frac{n}{p\cdot e}\log{n}\right)=\Omega\left(\frac{n}{p}\log{n}\right)$.\\
+		Anzustreben ist also, die Bucket Expansion, $e$, nach Möglichkeit, gering zu halten.
 		
+	\subsection{Sampling}
+		Oversampling ist der größte Hebel, um die Bucket Expansion gering zu halten.
+		Bei Tests mit der Samplesort Implementierung von der Standard Template Adaptive Parallel Library \autocite{berlin-2007} wurde ein optimaler Oversampling-Faktor von 128 festgestellt.
+		Der Versuch war allerdings begrenzt auf zufällige Daten.
+		Bei (zu großen teilen) vorsortierten\footnote{Unabhängig ob auf oder absteigend} Datensätzen, können auch identische Ergebnisse mit kleinen einstelligen Oversamling-Faktoren erreicht werden.\\
+		Auch das Auswahlverfahren für die Sample ist maßgebend.
+		Bei dem Test mit STAPL wurde auch dies untersucht.
+		Bei sortierten Daten ist die gleichmäßige Auswahl zur nächst besten Variante (Semi-Zufällig) vier mal schneller.
+		Das Block verfahren funktioniert bei vollkommen zufälligen Daten am besten und die zufälligen verfahren, wenn die Daten besonders ungünstig angeordnet sind.
+		Allerdings ist die gleichmäßige Auswahl in allen Testfällen, also zufällige und vollständig sortierte Datensätzen, die einzige annähernd konstant schnelle Methode.
+		
+	\subsection{Over Partitioning}
+		Zuvor wurde festgelegt, dass im Regelfall Buckets in der Anzahl, wie es Prozessoren gibt, gewählt werden sollten.
+		Beim Over Partitioning werden zu jedem Prozessor $k$ Buckets erstellt, die nacheinander sortiert werden.
+		Das wird gemacht, damit die Grundvoraussetzungen für den Algorithmus, der den Bucket sortiert\footnote{Wenn keine Rekursive Implementierung verwendet wird. Dies ist der Regelfall bei der Implementierung für mehrere Prozessoren.}, zu begünstigen.

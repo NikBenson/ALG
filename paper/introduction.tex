@@ -3,14 +3,14 @@
 	Dabei ist Samplesort eine Generalisierung des Quicksort und für große Datenmengen ausgelegt, bei denen andere Algorithmen, wie z. B. der klassische Quicksort oder Insertion Sort, durch eine bereits vorhandene Teilsortierung, nicht performant sind.
 	Auch ist Samplesort besonders effizient darin, viele Prozessorkerne möglichst effizient aus zu nutzen.
 	Aus diesem Grund findet er vor allem in hoch Skalierten Systemen, mit vielen Daten, Anwendung.\\
-	Damit findet er, auch wenn er über 50 Jahre alt ist, heute noch häufiger Anwendung.
+	Deshalb wird er, auch wenn er über 50 Jahre alt ist, heute noch verwendet.
 	Mit der Zeit gab es allerdings viele Optimierungen und Abweichungen vom Original.
 	Im Folgenden ist die Zugrundeliegende Sortierproblematik für die verschiedenen Anwendungsfälle differenzieren und darstellen, wie Samplesort funktioniert, wann seine Vorteile die anderer Algorithmen übertreffen und welche Variationen wann am besten sind.
 	\subsection{Sortierproblematik}
 		Schon seit Anbeginn der Theoretischen Informatik sind Sortieralgorithmen weit diskutiert.
 		Heute sind viele verschiedene Algorithmen bekannt, um verschiedene Anreihungen von Daten, auf die unterschiedlichsten Arten zu sortieren.
 		Eine Eigenschaft hat sich dabei besonders herausgestellt, und so wird im Folgenden nur Bezug auf vergleichsbasierte Sortieralgorithmen genommen.\footnote{Nicht vergleichsbasierte Sortieralgorithmen sind mit klassischer Hardware nicht umsetzbar und in der Regel Algorithmen für Hardwarekomponenten. So ist für Integer auch eine Laufzeit von $O(n)$ möglich. \autocite{abdel-hafeez-2017}}
-		Diese müssen ein Minimum von $n\log{n}$ Vergleichen durchführen, um jedes Element eindeutig einordnen zu können, und haben damit eine minimale Laufzeitkomplexität von $\Omega(n\log{n})$.\footnote{$O(f(x))$ ist die maximal begrenzte, $\Omega(f(x))$ die minimal begrenzte und $\Theta(f(x))$ die übereinstimmende maximal und minimal begrenzte Laufzeit. $O$, $\Omega$ und $\Theta$ beschreiben dabei einen konstanten Faktor. \autocite[4]{sedgewick-1996}}
+		Diese müssen ein Minimum von $\log_2{n!}$ Vergleichen durchführen, um jedes Element eindeutig einordnen zu können, und haben damit eine minimale Laufzeitkomplexität von $\Omega(\log_2{n!})$.\footnote{$O(f(x))$ ist die maximal begrenzte, $\Omega(f(x))$ die minimal begrenzte und $\Theta(f(x))$ die übereinstimmende maximal und minimal begrenzte Laufzeit. $O$, $\Omega$ und $\Theta$ beschreiben dabei einen konstanten Faktor. \autocite[4]{sedgewick-1996}}
 	
 		\paragraph{Aspekte eines Sortieralgorithmus}
 			Die Auswahl des richtigen Algorithmus kann dabei, abhängig vom Verwendungsfall, von verschiedenen Faktoren abhängig sein.\\

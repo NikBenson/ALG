@@ -1,6 +1,15 @@
 \section{Mathematische Eigenschaften}
+	Wie die meisten Sortieralgorithmen ist Samplesort mathematisch darstellbar.
+	Hierbei gibt es viele Perspektiven.
+	Im Folgenden ist die Laufzeit- und Speicherkomplexität dargestellt.
 	
-	\subsection{Laufzeitkomplexität}
-		
 	\subsection{Speicherkomplexität}
+		Samplesort ist ein in-place Sortieralgorithmus.
+		Das heißt, es wird kein zusätzlicher Speicher benötigt.\\
+		Soweit die Theorie zur Standardvariante.
+		Anders ist es beim Super Scalar Sample Sort. \autocite{sanders-2004} 
+		Dieser benötigt einen 2. temporären Array mit n Elementen und damit doppelt so viel Speicher.
+		An der Speicherkomplexität ändert sich damit allerdings nichts, diese bleibt bei $\Theta(n)$.
+	\subsection{Laufzeitkomplexität}
+
 		
