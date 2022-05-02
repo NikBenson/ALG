@@ -1,4 +1,5 @@
 \section{Implementierung}
+	\label{sec:implementation}
 	Es gibt viele verschiedene Variationen, Samplesort zu implementieren. Zu viele, um sie hier alle zu nennen.
 	Im Folgenden sind die bekanntesten Variationen dargestellt.\\
 	Dazu sind zunächst ein paar Grundbegriffe von Nöten:
@@ -13,10 +14,10 @@
 		Wichtig ist dabei, dass Elemente, die den selben Wert, wie ein Splitter haben, entweder in den Bucket links, oder rechts, von jenem, eingeordnet werden können.\\
 		Das Ziel ist dabei häufig, die Anzahl der Buckets identisch zur Anzahl der verfügbaren Prozessorkerne zu setzen, damit die Buckets parallel sortiert werden. Dies ist in \ref{sec:multithreading} weiter ausgeführt.
 
-	\subsection{Grundger\"ust}
+	\subsection{Phasen des Algorithmus}
 		Der grundlegende Aufbau ist dabei immer identisch und in \ref{fig:skeletton} beispielhaft dargestellt:
 		\lstinputlisting[language=C, caption={Samplesort Implementierung \autocite{benson-2022}}, label=fig:skeletton]{../code/src/samplesort/samplesort.c}
-		Zu erkennen sind 3 schritte, denen im folgenden auch jeweils eine Überschrift gewidmet ist:
+		Zu erkennen sind 3 phasen, denen im folgenden auch jeweils eine Überschrift gewidmet ist:
 		\begin{enumerate}
 			\item Auswählen von $\textit{bucketsCount}-1$ splittern
 			\item Zuordnen der Werte zu den sich daraus ergebenden Buckets
