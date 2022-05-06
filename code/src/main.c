@@ -40,8 +40,8 @@ int main() {
 
     SampleSortConfiguration configuration = {
             128,
-            8,
-            8*128,
+            15,
+            256,
             quicksort,
             compareIntPointers,
             swapInts,
@@ -53,6 +53,7 @@ int main() {
     traverseArray(numbers, checkIfSorted);
 
     printf("\b\b\n%s\n", isSorted ? "SUCCESS" : "FAILED");
+    printf("C=%lu, n=%lu", comparisons, arrayLength(numbers));
 
     return 0;
 }

@@ -21,15 +21,60 @@
 		Damit ist es dennoch in unserem Interesse, die Anzahl der vergleiche gering zu halten, außer dieses Problem wird, mit der parallelisierung der Vergleiche, durch sss-Sort umgangen.
 		
 		\paragraph{Sortierren der Sample}
-			Beim Sortieren der Sample werden $C_\textit{smallSort}(s)$ vergleiche benötigt, wobei $C_\textit(n)$ die Funktion der Vergleiche von \textit{smallSort} ist, und $s$ die Größe der Sample.
+			Beim Sortieren der Sample werden $C_\textit{smallSort}(s)$ vergleiche benötigt, wobei $C_\textit{smallSort}(n)$ die Funktion der Vergleiche von \textit{smallSort} ist, und $s$ die Größe der Sample.
 			Für Quicksort gilt durchschnittlich $C_\textit{smallSort}(n)=n\log{n}$. \autocite{wikipedia-contributors-2022}
 			
 		\paragraph{Schwellenwertunterschreitung}
-			Ist die durchschnittliche Größe eines Buckets kleiner als der Schwellenwertes, also $\frac{n}{s+1}\leq \textit{threshold}$, so gilt erneut $C_\textit{threshold}(n)=n\log{n}$
+			Ist die durchschnittliche Größe eines Buckets kleiner als der Schwellenwertes, also $\frac{n}{s+1}\leq \textit{threshold}$, so gilt erneut $C_\textit{threshold}(n)\equiv C_\textit{smallSort}=n\log{n}$
 		
 		\paragraph{Verteilen auf Buckets}
-			Das verteilen auf die Buckets ist an sich bereits ein Devide-And-Conquer-Algorithmus.
-			Seien $s$ die Anzahl der Splitter und $n$ die Anzahl der Elemente, die keine Splitter sind, so lässt sich folgende Rekursionsgleichung\footnote{Auch bekannt als Differenzengleichung} ableiten, vorausgesetzt $s,n\in \{\mathbb{N}\to 2^n\}$:
+			Das verteilen auf die Buckets ist an sich bereits ein Divide-And-Conquer-Algorithmus.
+			Seien $s$ die Anzahl der Splitter und $n$ die Anzahl der Elemente, die keine Splitter sind, so lässt sich folgende Rekursionsgleichung\footnote{Auch bekannt als Differenzengleichung} ableiten, vorausgesetzt $s,n\in \left\{ \mathbb{N}\to 2^n \right\}$, also $s$ und $n$ Potenzen von 2 sind:
 			\begin{equation}
-				C_{s,n}=n+2\cdot C_{\frac{s-1}{2}, \frac{n}{2}}%TODO initial condition
+				C_{s,n}=n+2\cdot C_{\frac{s-1}{2}, \frac{n}{2}}\ \text{für $s>1$ mit}\ C_{1,n}=n
 			\end{equation}
+			Über die folgende OGF\footnote{Ordinary Generating Function, also eine Sigmafunktion oder Summenformel, die eine Funktion generiert}, lässt sich leicht die Anzahl von $\sqrt{s}\cdot n$ ableiten:
+			\begin{equation}
+				C_s(n)=\sum_{k=1}^{\sqrt{s}}\left(2^{k-1}\cdot \frac{n}{2^{k-1}}\right)=\sum_{k=1}^{\sqrt{s}}n
+			\end{equation}
+		\paragraph
+			Zusammengesetzt ergibt sich folgende Funktion:
+			%TODO Offensichtlicher Fehler, vermutlich über Sigma Der einfachheit halber ersetzen durch nicht-rekursive Varriante
+			\begin{equation}
+				\begin{aligned}
+					C_{s,n}&=C_\textit{smallSort}\left(s\cdot \textit{oversamplingFactor}\right)\ +\ n\sqrt{s}\ +\ s\cdot C_{s, \frac{n}{s}}\ \text{für $\frac{n}{s} > \textit{threshold}$}\\
+					\text{mit}\ C_{s,n}&=C_\textit{threshold}(n)\ \text{für $\frac{n}{s} \leq \textit{threshold}$}\\
+					&\Leftrightarrow \sum_{k=1}^{\frac{n}{threshold\cdot s}}\left(sk \cdot\left(C_\textit{smallSort}\left(s\cdot \textit{oversamplingFactor}\right)\ +\ \frac{n}{sk}\sqrt{s}\right)\right)\\
+					&\>\> +\frac{n\cdot C_{\textit{threshold}}}{\textit{threshold}\cdot s}\\
+					&\equiv \sum_{k=1}^{\frac{n}{threshold\cdot s}}\left(sk \cdot C_\textit{smallSort}\left(s\cdot \textit{oversamplingFactor}\right)\ +\ n\sqrt{s}\right)\\
+					&\>\> +\frac{n\cdot C_{\textit{threshold}}}{\textit{threshold}\cdot s}\\
+					&\equiv s\cdot \sum_{k=1}^{\frac{n}{threshold\cdot s}}k\cdot C_\textit{smallSort}\left(s\cdot \textit{oversamplingFactor}\right)\ +\ \sum_{k=1}^{\frac{n}{threshold\cdot s}}n\sqrt{s}\\
+					&\>\> +\frac{n\cdot C_{\textit{threshold}}}{\textit{threshold}\cdot s}\\
+					&\equiv 2^{\frac{n}{\textit{threshold}\cdot s}-1}\cdot s\cdot C_\textit{smallSort}\left(s\cdot \textit{oversamplingFactor}\right)\ +\ \frac{n^2\sqrt{s}}{\textit{threshold}\cdot s}\\
+					&\>\> +\frac{n\cdot C_{\textit{threshold}}\left(\frac{\textit{threshold}\cdot s}{n}\right)}{\textit{threshold}\cdot s}\\
+				\end{aligned}
+			\end{equation}
+			Setzen wir für $C_{\textit{threshold}}(n)=C_{\textit{smallSort}}(n)=n\log{n}$, $\textit{oversamplingFactor}=128$, $\textit{threshold}=256$ und $s=16$ ein, so folgt daraus
+			\begin{equation}
+				\begin{aligned}
+					C(n)&=2^{\frac{n}{256\cdot 16}-1}\cdot 16\cdot 16\cdot 128\cdot \log{\left(16\cdot 128\right)}\ +\ \frac{n^2\sqrt{16}}{256\cdot 16}\ +\ \frac{n\cdot \frac{256\cdot 16}{n}\log{\frac{256\cdot 16}{n}}}{256\cdot 16}\\
+					&=2^{\frac{n}{4096}-1}\cdot 32768\log{2048}+\frac{n}{1024}+\log{\frac{4069}{n}}
+				\end{aligned}
+			\end{equation}
+			%end TODO
+			Dies ist deutlich näher an $\log{n!}$ als, z.B. Quicksort mit $n\log{n}$. 
+			Und da die Vergleiche, zu annähernd gleichen Teilen, auf alle Prozessoren verteilt werden, können wir durch dessen Anzahl teilen.
+			
+		\paragraph{Big O}
+			Da nicht nur Vergleiche durchgeführt werden, weicht die tatsächliche Laufzeit etwas von den Vergleichen ab.
+			Zum finden der Splitter ist dies $O\left(\frac{n}{p}\log{p}\right)$, für das verteilen auf die Buckets untergliedert es sich in: \autocite{wikipedia-contributors-2022}
+			\begin{itemize
+				\item $O(p)$ zum lesen aller Knoten
+				\item $O(\log{p})$ für das Broadcasten (Managen des asynchronen Prozesses)
+				\item $O\left(\frac{n}{p}\log{p}\right)$ um binär nach allen Elementen zu suchen
+				\item $O\left(\frac{n}{p}\right)$ zum senden der Elemente zum entsprechenden Prozessor
+			\end{itemize}
+			Und zu guter letzt das sortieren der Buckets, beispielsweise mit Quicksort, also $O\left(\frac{n}{p}\log{\frac{n}{p}}\right)$.\\
+			Insgesamt ist das $O\left(\frac{n}{p}\log{\frac{n}{p}}\right)$, da $O$ den konstanten Faktor der ersten Iteration vernachlässigt.\\
+			Dieser kon
+			
