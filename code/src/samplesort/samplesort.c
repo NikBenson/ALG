@@ -3,7 +3,7 @@
 #include "place_elements_in_corresponding_bucket.h"
 
 void sampleSort(Array data, SampleSortConfiguration configuration) {
-    unsigned int averageBucketSize = arrayLength(data) / configuration.oversamplingFactor;
+    unsigned int averageBucketSize = arrayLength(data) / (configuration.splittersCount + 1);
     if (averageBucketSize < configuration.threshold)
         return configuration.smallSort(data, configuration.compare, configuration.swap);
 

@@ -33,42 +33,40 @@
 			\begin{equation}
 				C_{s,n}=n+2\cdot C_{\frac{s-1}{2}, \frac{n}{2}}\ \text{für $s>1$ mit}\ C_{1,n}=n
 			\end{equation}
-			Über die folgende OGF\footnote{Ordinary Generating Function, also eine Sigmafunktion oder Summenformel, die eine Funktion generiert}, lässt sich leicht die Anzahl von $\sqrt{s}\cdot n$ ableiten:
+			Über die folgende OGF\footnote{Ordinary Generating Function, also eine Sigmafunktion oder Summenformel, die eine Funktion generiert}, lässt sich leicht die Anzahl von $s\cdot n$ ableiten:
 			\begin{equation}
-				C_s(n)=\sum_{k=1}^{\sqrt{s}}\left(2^{k-1}\cdot \frac{n}{2^{k-1}}\right)=\sum_{k=1}^{\sqrt{s}}n
+				C_s(n)=\sum_{k=1}^{s}\left(2^{k-1}\cdot \frac{n}{2^{k-1}}\right)=\sum_{k=1}^{s}n
 			\end{equation}
 		\paragraph
 			Zusammengesetzt ergibt sich folgende Funktion:
-			%TODO Offensichtlicher Fehler, vermutlich über Sigma Der einfachheit halber ersetzen durch nicht-rekursive Varriante
 			\begin{equation}
 				\begin{aligned}
-					C_{s,n}&=C_\textit{smallSort}\left(s\cdot \textit{oversamplingFactor}\right)\ +\ n\sqrt{s}\ +\ s\cdot C_{s, \frac{n}{s}}\ \text{für $\frac{n}{s} > \textit{threshold}$}\\
-					\text{mit}\ C_{s,n}&=C_\textit{threshold}(n)\ \text{für $\frac{n}{s} \leq \textit{threshold}$}\\
-					&\Leftrightarrow \sum_{k=1}^{\frac{n}{threshold\cdot s}}\left(sk \cdot\left(C_\textit{smallSort}\left(s\cdot \textit{oversamplingFactor}\right)\ +\ \frac{n}{sk}\sqrt{s}\right)\right)\\
-					&\>\> +\frac{n\cdot C_{\textit{threshold}}}{\textit{threshold}\cdot s}\\
-					&\equiv \sum_{k=1}^{\frac{n}{threshold\cdot s}}\left(sk \cdot C_\textit{smallSort}\left(s\cdot \textit{oversamplingFactor}\right)\ +\ n\sqrt{s}\right)\\
-					&\>\> +\frac{n\cdot C_{\textit{threshold}}}{\textit{threshold}\cdot s}\\
-					&\equiv s\cdot \sum_{k=1}^{\frac{n}{threshold\cdot s}}k\cdot C_\textit{smallSort}\left(s\cdot \textit{oversamplingFactor}\right)\ +\ \sum_{k=1}^{\frac{n}{threshold\cdot s}}n\sqrt{s}\\
-					&\>\> +\frac{n\cdot C_{\textit{threshold}}}{\textit{threshold}\cdot s}\\
-					&\equiv 2^{\frac{n}{\textit{threshold}\cdot s}-1}\cdot s\cdot C_\textit{smallSort}\left(s\cdot \textit{oversamplingFactor}\right)\ +\ \frac{n^2\sqrt{s}}{\textit{threshold}\cdot s}\\
-					&\>\> +\frac{n\cdot C_{\textit{threshold}}\left(\frac{\textit{threshold}\cdot s}{n}\right)}{\textit{threshold}\cdot s}\\
+					C_{n}&=C_\textit{smallSort}\left(s\cdot \textit{oversamplingFactor}\right)\ +\ ns\ +\ (s+1)\cdot C_{\frac{n}{s+1}}\ \text{für $\frac{n}{s} \geq \textit{threshold}$}\\
+					\text{mit}\ C_{n}&=C_\textit{threshold}(n)\ \text{für $\frac{n}{s} < \textit{threshold}$}\\
+					&\Leftrightarrow \sum_{k=1}^{\log_{s+1}\left(\frac{n}{\textit{threshold}}\right)}\left((s+1)^{k-1}\cdot\left(C_{\textit{smallSort}}(s\cdot\textit{oversamplingFactor})+\frac{ns}{(s+1)^{k-1}}\right)\right)\\
+					&\>\>\> +\log_{s+1}\left(\frac{n}{\textit{threshold}}\right)\cdot C_{\textit{threshold}}\left(\frac{n}{\log_{s+1}\left(\frac{n}{\textit{threshold}}\right)}\right)\\
+					&\equiv C_{\textit{smallSort}}(s\cdot\textit{oversamplingFactor})\cdot\sum_{k=1}^{\log_{s+1}\left(\frac{n}{\textit{threshold}}\right)}(s+1)^{k-1}\\
+					&\>\>\> +\log_{s+1}\left(\frac{n}{\textit{threshold}}\right)\cdot \left(ns+C_{\textit{threshold}}\left(\frac{n}{\log_{s+1}\left(\frac{n}{\textit{threshold}}\right)}\right)\right)\\
+					&\equiv C_{\textit{smallSort}}(s\cdot\textit{oversamplingFactor})\cdot\frac{(s+1)^{\log_{s+1}\left(\frac{n}{\textit{threshold}}\right)}-1}{s}\\
+					&\>\>\> +\log_{s+1}\left(\frac{n}{\textit{threshold}}\right)\cdot \left(ns+C_{\textit{threshold}}\left(\frac{n}{\log_{s+1}\left(\frac{n}{\textit{threshold}}\right)}\right)\right)\\
+					&=C_{\textit{smallSort}}(s\cdot\textit{oversamplingFactor})\cdot\frac{n-\textit{threshold}}{\textit{threshold}\cdot s}\\
+					&\>\>\> +\log_{s+1}\left(\frac{n}{\textit{threshold}}\right)\cdot \left(ns+C_{\textit{threshold}}\left(\frac{n}{\log_{s+1}\left(\frac{n}{\textit{threshold}}\right)}\right)\right)
 				\end{aligned}
 			\end{equation}
-			Setzen wir für $C_{\textit{threshold}}(n)=C_{\textit{smallSort}}(n)=n\log{n}$, $\textit{oversamplingFactor}=128$, $\textit{threshold}=256$ und $s=16$ ein, so folgt daraus
+			Setzen wir für $C_{\textit{threshold}}(n)=C_{\textit{smallSort}}(n)=n\log_2{n}$, $\textit{oversamplingFactor}=128$, $\textit{threshold}=256$ und $s=15$ ein, so folgt daraus
 			\begin{equation}
 				\begin{aligned}
-					C(n)&=2^{\frac{n}{256\cdot 16}-1}\cdot 16\cdot 16\cdot 128\cdot \log{\left(16\cdot 128\right)}\ +\ \frac{n^2\sqrt{16}}{256\cdot 16}\ +\ \frac{n\cdot \frac{256\cdot 16}{n}\log{\frac{256\cdot 16}{n}}}{256\cdot 16}\\
-					&=2^{\frac{n}{4096}-1}\cdot 32768\log{2048}+\frac{n}{1024}+\log{\frac{4069}{n}}
+					C_n&=15\cdot 128\cdot\log_2\left(15\cdot 128\right)\cdot \frac{n-256}{256\cdot15}+\log_{16}\left(\frac{n}{256}\right)\cdot\left(15n+\frac{n}{\log_{16}\left(\frac{n}{256}\right)}\log_2\left(\frac{n}{\log_{16}\left(\frac{n}{256}\right)}\right)\right)\\
+					&=%TODO calculate
 				\end{aligned}
 			\end{equation}
-			%end TODO
-			Dies ist deutlich näher an $\log{n!}$ als, z.B. Quicksort mit $n\log{n}$. 
+			Dies ist deutlich näher an $\log_2{n!}$ als, z.B. Quicksort mit $n\log_2{n}$. 
 			Und da die Vergleiche, zu annähernd gleichen Teilen, auf alle Prozessoren verteilt werden, können wir durch dessen Anzahl teilen.
 			
 		\paragraph{Big O}
 			Da nicht nur Vergleiche durchgeführt werden, weicht die tatsächliche Laufzeit etwas von den Vergleichen ab.
 			Zum finden der Splitter ist dies $O\left(\frac{n}{p}\log{p}\right)$, für das verteilen auf die Buckets untergliedert es sich in: \autocite{wikipedia-contributors-2022}
-			\begin{itemize
+			\begin{itemize}
 				\item $O(p)$ zum lesen aller Knoten
 				\item $O(\log{p})$ für das Broadcasten (Managen des asynchronen Prozesses)
 				\item $O\left(\frac{n}{p}\log{p}\right)$ um binär nach allen Elementen zu suchen
