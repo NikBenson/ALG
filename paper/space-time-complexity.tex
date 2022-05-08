@@ -22,7 +22,7 @@
 		
 		\paragraph{Sortierren der Sample}
 			Beim Sortieren der Sample werden $C_\textit{smallSort}(s)$ vergleiche benötigt, wobei $C_\textit{smallSort}(n)$ die Funktion der Vergleiche von \textit{smallSort} ist, und $s$ die Größe der Sample.
-			Für Quicksort gilt durchschnittlich $C_\textit{smallSort}(n)=n\log{n}$. \autocite{wikipedia-contributors-2022}
+			Für Quicksort gilt durchschnittlich $C_\textit{smallSort}(n)=n\log{n}$. \autocite{wikipedia-contributors-2022A}
 			
 		\paragraph{Schwellenwertunterschreitung}
 			Ist die durchschnittliche Größe eines Buckets kleiner als der Schwellenwertes, also $\frac{n}{s+1}\leq \textit{threshold}$, so gilt erneut $C_\textit{threshold}(n)\equiv C_\textit{smallSort}=n\log{n}$
@@ -38,8 +38,9 @@
 				C_s(n)=\sum_{k=1}^{s}\left(2^{k-1}\cdot \frac{n}{2^{k-1}}\right)=\sum_{k=1}^{s}n
 			\end{equation}
 		\paragraph
-			Zusammengesetzt ergibt sich folgende Funktion:
+			Zusammengesetzt ergibt sich folgende Funktion, für eine einfache Implementierung, ohne die Splitter aus den Buckets zu nehmen und $n>\textit{threshold}$:
 			\begin{equation}
+				\label{equ:comparisons}
 				\begin{aligned}
 					C_{n}&=C_\textit{smallSort}\left(s\cdot \textit{oversamplingFactor}\right)\ +\ ns\ +\ (s+1)\cdot C_{\frac{n}{s+1}}\ \text{für $\frac{n}{s} \geq \textit{threshold}$}\\
 					\text{mit}\ C_{n}&=C_\textit{threshold}(n)\ \text{für $\frac{n}{s} < \textit{threshold}$}\\
@@ -57,7 +58,7 @@
 			\begin{equation}
 				\begin{aligned}
 					C_n&=15\cdot 128\cdot\log_2\left(15\cdot 128\right)\cdot \frac{n-256}{256\cdot15}+\log_{16}\left(\frac{n}{256}\right)\cdot\left(15n+\frac{n}{\log_{16}\left(\frac{n}{256}\right)}\log_2\left(\frac{n}{\log_{16}\left(\frac{n}{256}\right)}\right)\right)\\
-					&=%TODO calculate
+					&\equiv 15n\log_{16}\left(\frac{n}{256}\right)+n\log_{2}\left(\frac{n}{\log_{16}\left(\frac{n}{256}\right)}\right)+\frac{n}{2}\log_2\left(1920\right)-128\log_2\left(1920\right)
 				\end{aligned}
 			\end{equation}
 			Dies ist deutlich näher an $\log_2{n!}$ als, z.B. Quicksort mit $n\log_2{n}$. 
@@ -65,7 +66,7 @@
 			
 		\paragraph{Big O}
 			Da nicht nur Vergleiche durchgeführt werden, weicht die tatsächliche Laufzeit etwas von den Vergleichen ab.
-			Zum finden der Splitter ist dies $O\left(\frac{n}{p}\log{p}\right)$, für das verteilen auf die Buckets untergliedert es sich in: \autocite{wikipedia-contributors-2022}
+			Zum finden der Splitter ist dies $O\left(\frac{n}{p}\log{p}\right)$, für das verteilen auf die Buckets untergliedert es sich in: \autocite{wikipedia-contributors-2021}
 			\begin{itemize}
 				\item $O(p)$ zum lesen aller Knoten
 				\item $O(\log{p})$ für das Broadcasten (Managen des asynchronen Prozesses)
@@ -74,5 +75,11 @@
 			\end{itemize}
 			Und zu guter letzt das sortieren der Buckets, beispielsweise mit Quicksort, also $O\left(\frac{n}{p}\log{\frac{n}{p}}\right)$.\\
 			Insgesamt ist das $O\left(\frac{n}{p}\log{\frac{n}{p}}\right)$, da $O$ den konstanten Faktor der ersten Iteration vernachlässigt.\\
-			Dieser kon
+			Zu beachten ist, dass in \ref{equ:comparisons} eine Rekursive Implementierung dargestellt ist, und in diesem Abschnitt Quicksort als sekundärer Algorithmus verwendet wird.
+			Dies macht allerdings keinen Unterschied aus, da Big O der beiden Algorithmen identisch ist.
+			Der wichtige unterschied, den Big O hier verbirgt ist, dass
+			\begin{enumerate}
+				\item Quicksort bei entarteten Daten eine Laufzeit von $O\left(n^2\right)$ hat
+				\item das teilen durch $p$ eine Vereinfachung ist, da nicht jeder Bucket gleich groß ist. Allerdings ist die Standardabweichung, zum einen, abgesicherter gegen entartete Daten, und zum anderen deutlich geringer durch das Sampling.
+			\end{enumerate}
 			

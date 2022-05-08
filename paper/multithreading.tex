@@ -26,3 +26,9 @@
 		Zuvor wurde festgelegt, dass im Regelfall Buckets in der Anzahl, wie es Prozessoren gibt, gewählt werden sollten.
 		Beim Over Partitioning werden zu jedem Prozessor $k$ Buckets erstellt, die nacheinander sortiert werden.
 		Das wird gemacht, um die Grundvoraussetzungen für den Algorithmus, der den Bucket sortiert\footnote{Wenn keine Rekursive Implementierung verwendet wird. Dies ist der Regelfall bei der Implementierung für mehrere Prozessoren.}, zu begünstigen.
+	
+	\subsection{Samplesort auf der GPU}
+		Da Samplesort optimal mit vielen Prozessoren arbeitet, bietet es sich an, diesen auf Graphic Processing Units, kurz GPUs, aus zu führen.
+		Diese haben, im Gegensatz zu Central Processing Units, kurz CPUs, viele Kerne (Prozessoren), mit wenig wenig Leistung. \autocite{wikipedia-contributors-2022B}
+		Samplesort erreicht hier eine Verbesserung von mindestens 25\% und durchschnittlich 68\% zu GPU Thrust merge sort, \autocite{leischner-2010} dem schnellsten GPU Sortieralgorithmius in 2010, welcher auch heute noch beliebt ist. \autocite{unknown-author-2016}
+		Eine herkömmliche Quicksort Implementierung auf der GPU benötigt sogar im durchschnitt die doppelte Zeit.

@@ -1,5 +1,40 @@
-\section{Schlussfolgerungen}
-
-\subsection{Vorteil gegenüber anderen Sortieralgorithmen}
-
-\subsection{Wann ist es Sinnvoll, Samplesort zu verwenden?}
+\section{Fazit}
+	Auf den vergangenen Seiten wurde euch Samplesort vorgestellt.
+	Samplesort ist eine Verallgemeinerung vom Median of 3 Quicksort, welche 1970 zuerst vorgeschlagen wurde.\\
+	Dabei wird im ersten Schritt eine Sample ausgewählt und sortiert.
+	Danach werden gleichmäßig Splitter ausgewählt und alle Elemente auf die entstehenden Buckets verteilt.
+	Anschließend müssen lediglich noch die Buckets sortiert werden.
+	
+	\subsection{Vorteil und Nachteile gegenüber anderen Sortieralgorithmen}
+		Im Gegensatz zu Quicksort und anderen Sortieralgorithmen lässt sich Samplesort nicht in 5 Minuten implementieren.
+		Dennoch wird Samplesort in vielen großen Systemen verwendet.
+		Bei unserer Implementierung sind wir vor allem auf 3 Vorteile gestoßen:
+		\begin{enumerate}
+			\item Entartung\\
+				Während Quicksort bei vorsortierten Daten schnell entartet, kann Samplesort dieses Problem durch Oversampling meist umgehen.
+			\item Vergleiche\\
+				Samplesort erzielt durch die geschickte Auswahl der Splitter im durchschnitt 15\% weniger vergleiche.
+				Dies ist für die Laufzeit besonders wichtig, da dies Branching bei der Pipline von Prozessoren verhindert.
+				Optimal wird dieses Problem von Super-Scalar-Samplesort umgangen durch die Parallelisierung von diesen Vergleichsoperationen, allerdings muss diese Variante abstriche machen, da sie nicht In-Place ist.
+			\item Multithreading\\
+				Auf Systemen mit mehreren Prozessoren, ist Samplesort besonders performant, wenn die Anzahl der Buckets gleich der Anzahl der Prozessoren (bzw. Prozessorkerne) ist.
+				Dadurch, dass die Buckets annähernd identisch groß sind, haben auch die einzelnen Prozessoren eine annähernd identische Last.
+		\end{enumerate}
+		Doch es gibt auch einige Nachteile.
+		\begin{enumerate}
+			\item Als erstes ist hier der hohe Implementierungsaufwand zu nennen.\\
+				Dieser relativiert sich allerdings, wenn wir Samplesort mit anderen parallelisierten Hochleistungsalgorithmen vergleichen.
+			\item Overhead\\
+				Das Sampling ist mit einem Zusatzaufwand verbunden.
+				Wenn nicht von entarteten Daten ausgegangen wird, so ist Quicksort schneller.
+			\item viele identische Werte\\
+				Genau wie bei Quicksort, werden bei vielen identischen Werten, viele unnötige vergleiche getätigt.
+				Hier können Equality Buckets Abhilfe schaffen.
+		\end{enumerate}
+		
+	\subsection{Wann ist es Sinnvoll, Samplesort zu verwenden?}
+		Diese Frage hat keine eindeutige Antwort, doch sie lässt sich von den Vor- und Nachteilen ableiten.\\
+		Für große, potentiell entartete, Daten, bietet sich Samplesort an, wenn wenige vergleiche wichtig sind.
+		Ein Beispiel hierfür sind Dateien mit JSON Objekten, da diese nicht in großen Mengen im RAM gespeichert werden können.\\
+		Auf der anderen Seite stehen parallele Systeme. Hier bietet die gleichmäßige Verteilung, auch für GPUs, einen entscheidenen Vorteil, der Samplesort besonders performant macht.\\
+		Grundsätzlich immer bei parallelen Systemen, dazu zählen auch verteilte Systeme, ist Samplesort ein Gedanke, mit dem sich betroffene beschäftigen sollten.
