@@ -1,3 +1,4 @@
+% !TeX root = main.tex
 \documentclass[12pt]{article}
 
 \author{Nik Benson (202123513)}
@@ -7,6 +8,7 @@
 \usepackage[T1]{fontenc}
 \usepackage[ngerman]{babel}
 \usepackage[ngerman=ngerman-x-latest]{hyphsubst}
+\usepackage{csquotes}
 \usepackage{hyphenat}
 \usepackage{xspace}
 \usepackage{listings}
@@ -21,8 +23,8 @@
 \bibliography{bibliography}
 
 \usepackage{listings}
-\renewcommand{\lstlistingname}{Abbildung}
-\renewcommand{\lstlistlistingname}{Liste der \lstlistingname en}
+\renewcommand{\lstlistingname}{Code}
+\renewcommand{\lstlistlistingname}{Codeverzeichnis}
 
 \usepackage{hyperref}
 \hypersetup{
@@ -71,7 +73,9 @@
     \addcontentsline{toc}{section}{Inhaltsverzeichnis}
 	\tableofcontents
 	\newpage
-	\addcontentsline{toc}{section}{Liste der Abbildungen}
+	\addcontentsline{toc}{section}{Abbildungsverzeichnis}
+    \listoffigures
+	\addcontentsline{toc}{section}{Codeverzeichnis}
 	\lstlistoflistings
 	\newpage
 	\pagenumbering{arabic}

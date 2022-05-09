@@ -16,3 +16,7 @@ paper/*.log
 *.@@@
 *.DS_Store
 **/.texpadtmp/**/**.*
+*.fdb_latexmk
+*.fls
+*.synctex.gz
+*.lof

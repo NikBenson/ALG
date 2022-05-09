@@ -79,7 +79,10 @@
 			Dies macht allerdings keinen Unterschied aus, da Big O der beiden Algorithmen identisch ist.
 			Der wichtige unterschied, den Big O hier verbirgt ist, dass
 			\begin{enumerate}
-				\item Quicksort bei entarteten Daten eine Laufzeit von $O\left(n^2\right)$ hat
-				\item das teilen durch $p$ eine Vereinfachung ist, da nicht jeder Bucket gleich groß ist. Allerdings ist die Standardabweichung, zum einen, abgesicherter gegen entartete Daten, und zum anderen deutlich geringer durch das Sampling.
+				\item Quicksort bei entarteten Daten eine Laufzeit von $O\left(n^2\right)$ hat.
+					Dies ist bei Samplesort nur bei einigen Implementierungen der Fall, wenn alle Elemente identisch sind.
+					Hier können Equality Buckets abhilfe schaffen.
+				\item das teilen durch $p$ eine Vereinfachung ist, da nicht jeder Bucket gleich groß ist.
+					Allerdings ist die Standardabweichung, zum einen, abgesicherter gegen entartete Daten, und zum anderen deutlich geringer durch das Sampling.
 			\end{enumerate}
 			
