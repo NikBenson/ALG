@@ -15,7 +15,7 @@
 		Ein Bucket ist der Bereich zwischen zwei benachbarten Splittern, so wie die beiden Bereiche neben dem größten sowie kleinsten Splitter.
 		Dies ist in \ref{fig:buckets-from-splitters} am beispiel der Splitter 100, 200 \& 300 visuell dargestellt.
 		\begin{figure}[h]
-			\caption{Buckets für Splitter \{100, 200, 300\} \autocite{benson-2022}}
+			\caption{Buckets für Splitter \autocite{benson-2022}}
 			\label{fig:buckets-from-splitters}
 			\begin{center}
 				\begin{math}
@@ -47,25 +47,33 @@
 		\end{enumerate}
 		
 
-	%TODO continue proofreading from here
 	\subsection{Auswahl der Splitter}
 		Das Ziel bei der Auswahl der Splitter ist, dass möglichst gleich große Buckets entstehen.
 		\lstinputlisting[language=C, caption={Auswahl der Splitter \autocite{benson-2022}}, label=fig:select_splitters]{../code/src/samplesort/select_splitters.c}
-		Während der grundlegende Aufbau, wie in \ref{fig:select_splitters} dargestellt, immer der selbe ist, kann die Auswahl der Sample auf 4 verschiedene Arten erfolgen:\footnote{Sortiert von schnellster Laufzeit zu größter Randomisierung} \autocite{berlin-2007}
-		\begin{itemize}
-			\item \ref{sec:block} Block
-			\item \ref{sec:even} Gleichmäßig
-			\item \ref{sec:semi-random} Semi-Zufällig
-			\item \ref{sec:random} Zufällig
-		\end{itemize}
-		
-		\paragraph{Oversampling}
-			Die Sample ist dabei ein ausgewählter Teilbereich der Daten. Der \textit{oversamplingFactor} gibt an, wie wie groß die Sample ist, in der Form $\textit{sampleSize}=\textit{splittersCount}\cdot\textit{oversamplingFactor}$.\\
-		
-		\paragraph{Verwendung der Sample}
-			Die Sample wird sortiert und die Splitter werden gleichmäßig aus der Sample entnommen.
-			Dieser Prozess dient dazu, dass die Splitter die Buckets möglichst gleichmäßig unterteilen.
+		Zunächst wird eine Sample, also eine Representative Teilmenge der gesamtdaten, gebildet.
+		Diese wird sortiert und die Splitter werden in gleichmäßigen Abständen aus der sortierten Sample entnommen.\\
+		\begin{figure}[h]
+			\caption{Ermitteln der Splitter aus der Sample \autocite{benson-2022}}
+			\label{fig:splitters-from-sample}
+			\begin{center}
+				\begin{math}
+					\begin{matrix}
+							1    & 1 & 2 &     3    & 5 & 8 &    13    & 21 & 34 &    55    \\
+						\uparrow &   &   & \uparrow &   &   & \uparrow &    &    & \uparrow \\
+					\end{matrix}
+				\end{math}
+			\end{center}
+		\end{figure}\\
+		Ist die Sample hinreichend representativ, so folgt daraus, dass die resultierenden Splitter die Daten in annähernd identisch große Buckets unterteilt.\\
+		Dieser Prozess nennt sich \textbf{Oversampling}.
+		Er leitet sich aus dem Median of 3 Quicksort ab.
+		Es werden mehr Splitter/Pivot Elemente generiert, damit aus ihnen die optimalen ausgewählt werden können (Siehe \ref{fig:splitters-from-sample}).\\
+		Die größe der Sample ergibt sich dabei aus der Formel $(\textit{splittersCount}-1)\cdot\textit{oversamplingFactor}+1$.
+		Dieses Implementierungsdetail ergibt sich daraus, dass das erste Element jedes Blocks als Splitter genommen wird und lediglich das erste Element des letzten Blocks benötigt wird.
+		Dieses Detail ist dennoch wichtig, da viele Vergleiche beim sortieren der Sample gespart werden.\\
+		Die Auswahl der Sample kann dabei auf 4 verschiedene Arten erfolgen:\footnote{Sortiert von schnellster Laufzeit zu größter Randomisierung} \autocite{berlin-2007}
 
+		%TODO Continue review from here
 		\subsubsection{Block}
 			\label{sec:block}
 			\lstinputlisting[language=C, caption={Auswahl der Sample mit dem Block Verfahren \autocite{benson-2022}}, label=fig:select_sample_bloc]{../code/src/samplesort/choose_sample/block.c}
