@@ -53,7 +53,7 @@
 		Zunächst wird eine Sample, also eine Representative Teilmenge der gesamtdaten, gebildet.
 		Diese wird sortiert und die Splitter werden in gleichmäßigen Abständen aus der sortierten Sample entnommen.\\
 		\begin{figure}[h]
-			\caption{Ermitteln der Splitter aus der Sample \autocite{benson-2022}}
+			\caption{Ermitteln der Splitter aus der sortierten Sample \autocite{benson-2022}}
 			\label{fig:splitters-from-sample}
 			\begin{center}
 				\begin{math}
@@ -73,13 +73,13 @@
 		Dieses Detail ist dennoch wichtig, da viele Vergleiche beim sortieren der Sample gespart werden.\\
 		Die Auswahl der Sample kann dabei auf 4 verschiedene Arten erfolgen:\footnote{Sortiert von schnellster Laufzeit zu größter Randomisierung} \autocite{berlin-2007}
 
-		%TODO Continue review from here
 		\subsubsection{Block}
 			\label{sec:block}
 			\lstinputlisting[language=C, caption={Auswahl der Sample mit dem Block Verfahren \autocite{benson-2022}}, label=fig:select_sample_bloc]{../code/src/samplesort/choose_sample/block.c}
-			Hier besteht die Sample aus den ersten Elementen der zu sortierenden Daten.
+			Hier besteht die Sample aus den ersten/letzten Elementen der zu sortierenden Daten.
 			Da hier kein zusätzlicher Aufwand betrieben wird, ist diese Variante mit einer Laufzeit von $O(0)$ am schnellsten.
 			Allerdings ist hier das Risiko dafür, dass die Buckets entarten, also deutlich unterschiedlich groß werden, das höchste.
+			Diese Variante ist auch beim klassischen Quicksort die üblichste.
 
 		\subsubsection{Gleichmäßig}
 			\label{sec:even}
@@ -95,8 +95,9 @@
 			\label{sec:semi-random}
 			\lstinputlisting[language=C, caption={Auswahl der Sample Semi-Zufällig \autocite{benson-2022}}, label=fig:select_sample_semi-random]{../code/src/samplesort/choose_sample/semi_random.c}
 			Diese Methode ergänzt die Schrittweite von \ref{sec:even} um einen zufälligen Faktor.
+			Es wird jedes $r$-te Element genommen, wobei $r$ eine zufällige Ganzzahl kleiner der Schrittweite bei \ref{sec:even} ist.\\
 			Entsprechend ähnlich ist die Laufzeit mit $O(n)+O_R$, wobei R die Berechnung einer Zufallszahl ist.
-			Auch wenn das Ausmaß der Entartung verringert wird, so ist diese Implementierung für die selben Muster anfällig wie \ref{sec:even} und wenn dieser schlecht funktioniert empfiehlt es sich, \ref{sec:random} zu verwenden.
+			Auch wenn das Ausmaß der Entartung verringert wird, so ist diese Implementierung für ähnliche Muster anfällig wie \ref{sec:even} und wenn dieser schlecht funktioniert empfiehlt es sich, \ref{sec:random} zu verwenden.
 
 		\subsubsection{Zufällig}
 			\label{sec:random}
@@ -104,15 +105,19 @@
 			Mit dieser Implementierung wird durch eine vollständig zufällige Auswahl die vollständige Unabhängigkeit von den zu sortierenden Daten gewährleistet.\\
 			Im durchschnitt werden so genau die mittleren Splitter, die versucht werden, möglichst genau zu treffen, gefunden.
 			Allerdings, dadurch, dass dies vom Zufall abhängig ist, ist dies, abgesehen vom Oversampling, auch nur im Durchschnitt, der Fall.\\
-			Durch das Oversampling ist die Wahrscheinlichkeit, dass annähernd optimale Splitter ausgewählt werden, vorausgesetzt, es gibt nicht zu viele Duplikate, allerdings ziemlich hoch\\%TODO find maths
-			Auch steigt die Laufzeit auf $O(n\cdot O_R)$.\\
+			Durch das Oversampling ist die Wahrscheinlichkeit, dass annähernd optimale Splitter ausgewählt werden, vorausgesetzt, es gibt nicht zu viele Duplikate, allerdings ziemlich hoch.
+			Um genau zu sein wiird die durchschnittliche distanz zu den optimalen Splittern durch den \textit{oversamplingFactor} geteilt.\\
+			Auch steigt die Laufzeit auf $O(n\cdot O_R)$.\footnote{Zur veranschaulichung, technisch ist dies immer noch eine Laufzeit von $O(n)$}
 
 			\paragraph{Equality buckets}
-				Gibt es zu viele, nicht einzigartige, Elemente, so wird die Auswahl der optimalen Splitter, nicht nur bei einer zufälligen Wahl, proportional unzuverlässiger.
-				Hierzu können Equality Buckets genutzt werden.
-				Dabei bildet jeder Splitter einen eigenen Bucket, der alle Elemente fasst, die einen identischen Wert haben.\\
-				Desto mehr Duplikate es gibt, desto wahrscheinlicher ist, dass ein solches Duplikat als Splitter gewählt wird.
+				Gibt es viele gleichwertige Elemente müssen viele vermeidbare Vergleiche durchgefürt werden.
+				Hier helfen Equality buckets.\\
+				Die wahrscheinlichkeit, dass Elemente, die häufig vorkommen, als Splitter ausgewählt werden, ist am größten.
+				Deshalb bilden, bei einer Implementierung mit Equality Buckets, die Splitter jewails einen eigenen bucket, der nur gleichwertige Elemente fasst.
+				Daraus resultiert, dass die gleichwertigen Elemente schnell aus dem Weg geräumt werden.\\
+				Die Beispielimplementierung hat keine Equality Buckets.
 
+	%TODO Continue review from here
 	\subsection{Zuordnen jeden Wertes zu dem passenden Bucket}
 		\lstinputlisting[language=C, caption={Finden des richtigen Buckets \autocite{benson-2022}}, label=fig:place_elements_in_appropriate_bucket]{../code/src/samplesort/place_elements_in_corresponding_bucket.c}
 		An der Länge des Beispiels alleine ist zu erkennen, dass dies der aufwändigste schritt ist.
