@@ -117,22 +117,24 @@
 				Daraus resultiert, dass die gleichwertigen Elemente schnell aus dem Weg geräumt werden.\\
 				Die Beispielimplementierung hat keine Equality Buckets.
 
-	%TODO Continue review from here
 	\subsection{Zuordnen jeden Wertes zu dem passenden Bucket}
 		\lstinputlisting[language=C, caption={Finden des richtigen Buckets \autocite{benson-2022}}, label=fig:place_elements_in_appropriate_bucket]{../code/src/samplesort/place_elements_in_corresponding_bucket.c}
-		An der Länge des Beispiels alleine ist zu erkennen, dass dies der aufwändigste schritt ist.
-		Dies liegt daran, dass es keinen Algorithmus gibt, der in einer Iteration, alle Splitter richtig positioniert.
-		Entsprechend müssen die Daten wiederholt an einem Splitter, analog zum Quicksort, verteilt werden.\\
-		In \ref{fig:place_elements_in_appropriate_bucket} wird hier zu ein Rekursiver Ansatz gewählt.
-		Es sind aber auch imperative Ansätze denkbar.\\
-		Ein wichtiges Detail ist, die in-place Architektur beizubehalten.
-		Hierzu werden die Splitter als erstes an die beiden Enden der Daten aufgeteilt, bevor der Bereich dazwischen aufgeteilt wird.
-		Daraus ergibt sich, dass von der Mitte der Splitter nach außen gearbeitet wird.\\
+		Nun gildt es, die Elemente den Buckets zuzuordnen.
+		Für einen Array gibt es keine möglichkeit, dies in einer Iteration zu realisieren.
+		Begründet wird dies dadurch, dass die tatsächliche Größe der Buckets noch nicht bekannt ist.\\
+		Deshalb wird der selbe Algorithmus wie beim klassischen Quicksort verwendet:
+		Es werden die Elemente an jedem Splitter einzeln auf beide Seiten verteilt und dann wird der Algorithmus für beide seiten wiederholt.
+		Das übernehmen der Splitter in die nächste Iteration ist hier in den ersten beiden Schleifen realisiert, in dem die Splitter am anfang bzw. ende der beiden Hälften positioniert werden.
+		Um diesen Aufwand zu vermeiden ist es auch denkbar, zunächst mit dem letzten splitter zu starten, damit die splitter am anfang des Arrays nicht bewegt werden müssen.
+		Oder es kann ganz vermiden werden, wenn auf eine in-place implementierung verzichtet wird.\\
+		Hier ist allerdings ein rekursiver Ansatz gewählt, der von der mitte zum rand arbeitet.
+		So kann der Sotrtierprozess für jeden Bucket angestoßen werden, sobald eine Hälfte keine Splitter mehr beinhaltet.\\
 		Daraus ergeben sich $n\log_2s$ vergleiche so wie Austausch Operationen, was einer Laufzeitkomplexität von $\Theta(n\log{s})$ entspricht.\footnote{$n$ ist die Anzahl der Elemente und $s$ die Anzahl der Splitter}
 
 	\subsection{Sortieren der Buckets}
 		Um den Sortierprozess fertig zu stellen ist es noch notwendig, alle Buckets zu sortieren.
-		Zu diesem Zweck gibt es 2 Überkategorien:
+		In dieser Implementierung geschiet dies zusammen mit dem verteilen auf die Buckets.
+		Zur Art und Weise, wie die Buckets sortiert werden, gibt es allerdings 2 Überlegungen:
 		\subsubsection{Original}
 			Im Original \autocite{frazer-1970} wird Quicksort verwendet, um die Buckets zu sortieren.
 			Der zugrundeliegende Gedanke ist, dass, durch das initiale gleichmäßige verteilen der Elemente, jeder Prozessorkern nun annähernd gleich viele Elemente bearbeiten soll.\\
@@ -140,8 +142,9 @@
 		\subsubsection{Rekursiv}
 			Dem entgegen steht die rekursive Implementierung.
 			Diese ist auch in \ref{fig:skeletton} umgesetzt.\\
-			Hier ist der Vorteil der geringen Anzahl an Vergleichen von Samplesort länger gegeben. Als Rekursionsanker dient in der Regel ein Schwellenwert (\textit{Threshold}).
-			Überschreitet die durchschnittliche Größe eines Buckets diese Zahl, so wird zu einem alternativen Sortieralgorithmus gewechselt. \\
+			Hier ist der Vorteil der geringen Anzahl an Vergleichen von Samplesort länger gegeben.
+			Als Rekursionsanker dient in der Regel ein Schwellenwert (\textit{threshold}).
+			Überschreitet die durchschnittliche Größe eines Buckets diese Zahl, so wird zu einem alternativen Sortieralgorithmus gewechselt.\\
 			Hier bietet sich Insertion Sort an, da dieser für kleine Datenmengen optimal ist. \autocite{geeksforgeeks-2021} 
 			In vielen Ausführungen ist hier allerdings auch ein Quicksort zu finden.
 			Die Entscheidung sollte von der Größe des Schwellenwerts getrieben sein.
