@@ -21,7 +21,7 @@
 		Wenn, wie in \ref{sec:implementation}, lediglich Integer verglichen werden\footnote{In der Regel benötigt diese Operation lediglich so viel Zeit, wie eine Subtraktionsoperation}, so ist die benötigte Zeit vernachlässigbar.
 		Allerdings tritt ein Problem mit den sogenannten Conditional branches, also den bedingten Abzweigungen der Byte~code~instruktionen, auf:
 		Werden die Anweisungen in das Register, also den Anweisungscache, des Prozessors geladen, so ist die Wahrscheinlichkeit für jede Abzweigung, also jedes Ergebnis der Vergleichsoperation, bei $n\log{n}$\footnote{Da jedes Element transitiv mit jedem anderen verglichen wird} vergleichen, annähernd $50\%$.
-		Damit kann keine Sinnvolle Annahme getroffen werden, welche Instruktionen in das Register geladen werden sollen.
+		Damit kann keine sinnvolle Annahme getroffen werden, welche Instruktionen in das Register geladen werden sollen.
 		Wird der falsche Zweig genommen, so muss die Operation wiederholt werden und wenn alle Möglichkeiten geladen werden, wird für jeden Abzweig die Last verdoppelt. \autocite{sanders-2004}\\
 		Damit ist es dennoch in unserem Interesse, die Anzahl der vergleiche gering zu halten, außer dieses Problem wird, mit der parallelisierung der Vergleiche, durch sss-Sort umgangen.
 		
@@ -30,10 +30,10 @@
 			Für Quicksort gilt durchschnittlich $C_\textit{smallSort}(n)=n\log{n}$. \autocite{wikipedia-contributors-2022A}
 			
 		\paragraph{Schwellenwertunterschreitung}
-			Ist die durchschnittliche Größe eines Buckets kleiner als der Schwellenwertes, also $\frac{n}{s+1}\leq \textit{threshold}$, so gilt erneut $C_\textit{threshold}(n)\equiv C_\textit{smallSort}=n\log{n}$
+			Ist die durchschnittliche Größe eines Buckets kleiner als der Schwellenwert, also $\frac{n}{s+1}\leq \textit{threshold}$, so gilt erneut $C_\textit{threshold}(n)\equiv C_\textit{smallSort}=n\log{n}$
 		
 		\paragraph{Verteilen auf Buckets}
-			Das verteilen auf die Buckets ist an sich bereits ein Divide-And-Conquer-Algorithmus.
+			Das Verteilen auf die Buckets ist an sich bereits ein Divide-And-Conquer-Algorithmus.
 			Seien $s$ die Anzahl der Splitter und $n$ die Anzahl der Elemente, die keine Splitter sind, so lässt sich folgende Rekursionsgleichung\footnote{Auch bekannt als Differenzengleichung} ableiten, vorausgesetzt $s,n\in \left\{ \mathbb{N}\to 2^n \right\}$, also $s$ und $n$ Potenzen von 2 sind:
 			\begin{equation}
 				C_{s,n}=n+2\cdot C_{\frac{s-1}{2}, \frac{n}{2}}\ \text{für $s>1$ mit}\ C_{1,n}=n
@@ -71,14 +71,14 @@
 			
 		\paragraph{Big O}
 			Da nicht nur Vergleiche durchgeführt werden, weicht die tatsächliche Laufzeit etwas von den Vergleichen ab.
-			Zum finden der Splitter ist dies $O\left(\frac{n}{p}\log{p}\right)$, für das verteilen auf die Buckets untergliedert es sich in: \autocite{wikipedia-contributors-2021}
+			Zum Finden der Splitter ist dies $O\left(\frac{n}{p}\log{p}\right)$, für das Verteilen auf die Buckets untergliedert es sich in: \autocite{wikipedia-contributors-2021}
 			\begin{itemize}
-				\item $O(p)$ zum lesen aller Knoten
+				\item $O(p)$ zum Lesen aller Knoten
 				\item $O(\log{p})$ für das Broadcasten (Managen des asynchronen Prozesses)
-				\item $O\left(\frac{n}{p}\log{p}\right)$ um binär nach allen Elementen zu suchen
-				\item $O\left(\frac{n}{p}\right)$ zum senden der Elemente zum entsprechenden Prozessor
+				\item $O\left(\frac{n}{p}\log{p}\right)$, um binär nach allen Elementen zu suchen
+				\item $O\left(\frac{n}{p}\right)$ zum Senden der Elemente zum entsprechenden Prozessor
 			\end{itemize}
-			Und zu guter letzt das sortieren der Buckets, beispielsweise mit Quicksort, also $O\left(\frac{n}{p}\log{\frac{n}{p}}\right)$.\\
+			Und zu guter letzt das Sortieren der Buckets, beispielsweise mit Quicksort, also $O\left(\frac{n}{p}\log{\frac{n}{p}}\right)$.\\
 			Insgesamt ist das $O\left(\frac{n}{p}\log{\frac{n}{p}}\right)$, da $O$ den konstanten Faktor der ersten Iteration vernachlässigt.\\
 			Zu beachten ist, dass in \ref{equ:comparisons} eine Rekursive Implementierung dargestellt ist, und in diesem Abschnitt Quicksort als sekundärer Algorithmus verwendet wird.
 			Dies macht allerdings keinen Unterschied aus, da Big O der beiden Algorithmen identisch ist.

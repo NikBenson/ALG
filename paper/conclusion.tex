@@ -13,7 +13,7 @@
 			\item Entartung\\
 				Während Quicksort bei vorsortierten Daten schnell entartet, kann Samplesort dieses Problem durch Oversampling meist umgehen.
 			\item Vergleiche\\
-				Samplesort erzielt durch die geschickte Auswahl der Splitter im durchschnitt 15\% weniger vergleiche.
+				Samplesort erzielt durch die geschickte Auswahl der Splitter im Durchschnitt 15\% weniger vergleiche.
 				Dies ist für die Laufzeit besonders wichtig, da dies Branching bei der Pipline von Prozessoren verhindert.
 				Optimal wird dieses Problem von Super-Scalar-Samplesort umgangen durch die Parallelisierung von diesen Vergleichsoperationen, allerdings muss diese Variante abstriche machen, da sie nicht In-Place ist.
 			\item Multithreading\\
@@ -22,19 +22,19 @@
 		\end{enumerate}
 		Doch es gibt auch einige Nachteile.
 		\begin{enumerate}
-			\item Als erstes ist hier der hohe Implementierungsaufwand zu nennen.\\
+			\item Als Erstes ist hier der hohe Implementierungsaufwand zu nennen.\\
 				Dieser relativiert sich allerdings, wenn wir Samplesort mit anderen parallelisierten Hochleistungsalgorithmen vergleichen.
 			\item Overhead\\
 				Das Sampling ist mit einem Zusatzaufwand verbunden.
 				Wenn nicht von entarteten Daten ausgegangen wird, so ist Quicksort schneller.
-			\item viele identische Werte\\
+			\item Viele identische Werte\\
 				Genau wie bei Quicksort, werden bei vielen identischen Werten, viele unnötige vergleiche getätigt.
 				Hier können Equality Buckets Abhilfe schaffen.
 		\end{enumerate}
 		
-	\subsection{Wann ist es Sinnvoll, Samplesort zu verwenden?}
+	\subsection{Wann ist es sinnvoll, Samplesort zu verwenden?}
 		Diese Frage hat keine eindeutige Antwort, doch sie lässt sich von den Vor- und Nachteilen ableiten.\\
-		Für große, potentiell entartete, Daten, bietet sich Samplesort an, wenn wenige vergleiche wichtig sind.
+		Für große, potenziell entartete, Daten, bietet sich Samplesort an, wenn wenige vergleiche wichtig sind.
 		Ein Beispiel hierfür sind Dateien mit JSON Objekten, da diese nicht in großen Mengen im RAM gespeichert werden können.\\
 		Auf der anderen Seite stehen parallele Systeme. Hier bietet die gleichmäßige Verteilung, auch für GPUs, einen entscheidenen Vorteil, der Samplesort besonders performant macht.\\
 		Grundsätzlich immer bei parallelen Systemen, dazu zählen auch verteilte Systeme, ist Samplesort ein Gedanke, mit dem sich betroffene beschäftigen sollten.

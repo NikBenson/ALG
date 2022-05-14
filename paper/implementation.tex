@@ -5,7 +5,7 @@
 	Diese Implementierung gildt als eine der schnellsten Samplesort Implementierungen, ist allerdings nicht parallelisiert.
 	Dem entgegen steht die Implementierung von STAPL, die parallelisierte Standartbibliothek. \autocite{berlin-2007}\\
 	Diese Varianten fördern allerdings nicht das Verständnis, weshalb wir uns mit einer eigenen Implementierung auseinandersetzen werden.
-	Dazu sind zunächst ein paar Grundbegriffe von Nöten:
+	Dazu sind zunächst ein paar Grundbegriffe notwendig:
 	\paragraph{Splitter}
 		Splitter wurden bereits in der Einleitung erwähnt.
 		Dort haben wir uns damit begnügt, diese mit den Pivot Elementen beim Quicksort zu vergleichen.
@@ -26,7 +26,7 @@
 				\end{math}
 			\end{center}
 		\end{figure}\\
-		Wichtig ist dabei, dass Elemente, die den selben Wert, wie ein Splitter haben, entweder in den Bucket links, oder rechts, von jenem, eingeordnet werden können.\\
+		Wichtig ist dabei, dass Elemente, die denselben Wert, wie ein Splitter haben, entweder in den Bucket links, oder rechts, von jenem, eingeordnet werden können.\\
 		Das Ziel ist dabei häufig, die Anzahl der Buckets identisch zur Anzahl der verfügbaren Prozessorkerne zu setzen, damit die Buckets parallel sortiert werden.
 		Dies ist in \ref{sec:multithreading} weiter ausgeführt.
 
@@ -70,7 +70,7 @@
 		Es werden mehr Splitter/Pivot Elemente generiert, damit aus ihnen die optimalen ausgewählt werden können (Siehe \ref{fig:splitters-from-sample}).\\
 		Die größe der Sample ergibt sich dabei aus der Formel $(\textit{splittersCount}-1)\cdot\textit{oversamplingFactor}+1$.
 		Dieses Implementierungsdetail ergibt sich daraus, dass das erste Element jedes Blocks als Splitter genommen wird und lediglich das erste Element des letzten Blocks benötigt wird.
-		Dieses Detail ist dennoch wichtig, da viele Vergleiche beim sortieren der Sample gespart werden.\\
+		Dieses Detail ist dennoch wichtig, da viele Vergleiche beim Sortieren der Sample gespart werden.\\
 		Die Auswahl der Sample kann dabei auf 4 verschiedene Arten erfolgen:\footnote{Sortiert von schnellster Laufzeit zu größter Randomisierung} \autocite{berlin-2007}
 
 		\subsubsection{Block}
@@ -101,9 +101,9 @@
 
 		\subsubsection{Zufällig}
 			\label{sec:random}
-			\lstinputlisting[language=C, caption={Auswahl der Sample Zufällig \autocite{benson-2022}}, label=fig:select_sample_random]{../code/src/samplesort/choose_sample/random.c}
+			\lstinputlisting[language=C, caption={Zufällige Auswahl der Sample \autocite{benson-2022}}, label=fig:select_sample_random]{../code/src/samplesort/choose_sample/random.c}
 			Mit dieser Implementierung wird durch eine vollständig zufällige Auswahl die vollständige Unabhängigkeit von den zu sortierenden Daten gewährleistet.\\
-			Im durchschnitt werden so genau die mittleren Splitter, die versucht werden, möglichst genau zu treffen, gefunden.
+			Im Durchschnitt werden so genau die mittleren Splitter, die versucht werden, möglichst genau zu treffen, gefunden.
 			Allerdings, dadurch, dass dies vom Zufall abhängig ist, ist dies, abgesehen vom Oversampling, auch nur im Durchschnitt, der Fall.\\
 			Durch das Oversampling ist die Wahrscheinlichkeit, dass annähernd optimale Splitter ausgewählt werden, vorausgesetzt, es gibt nicht zu viele Duplikate, allerdings ziemlich hoch.
 			Um genau zu sein wiird die durchschnittliche distanz zu den optimalen Splittern durch den \textit{oversamplingFactor} geteilt.\\
@@ -122,9 +122,9 @@
 		Nun gildt es, die Elemente den Buckets zuzuordnen.
 		Für einen Array gibt es keine möglichkeit, dies in einer Iteration zu realisieren.
 		Begründet wird dies dadurch, dass die tatsächliche Größe der Buckets noch nicht bekannt ist.\\
-		Deshalb wird der selbe Algorithmus wie beim klassischen Quicksort verwendet:
+		Deshalb wird derselbe Algorithmus wie beim klassischen Quicksort verwendet:
 		Es werden die Elemente an jedem Splitter einzeln auf beide Seiten verteilt und dann wird der Algorithmus für beide seiten wiederholt.
-		Das übernehmen der Splitter in die nächste Iteration ist hier in den ersten beiden Schleifen realisiert, in dem die Splitter am anfang bzw. ende der beiden Hälften positioniert werden.
+		Das Übernehmen der Splitter in die nächste Iteration ist hier in den ersten beiden Schleifen realisiert, in dem die Splitter am anfang bzw. ende der beiden Hälften positioniert werden.
 		Um diesen Aufwand zu vermeiden ist es auch denkbar, zunächst mit dem letzten splitter zu starten, damit die splitter am anfang des Arrays nicht bewegt werden müssen.
 		Oder es kann ganz vermiden werden, wenn auf eine in-place implementierung verzichtet wird.\\
 		Hier ist allerdings ein rekursiver Ansatz gewählt, der von der mitte zum rand arbeitet.
@@ -132,13 +132,13 @@
 		Daraus ergeben sich $n\log_2s$ vergleiche so wie Austausch Operationen, was einer Laufzeitkomplexität von $\Theta(n\log{s})$ entspricht.\footnote{$n$ ist die Anzahl der Elemente und $s$ die Anzahl der Splitter}
 
 	\subsection{Sortieren der Buckets}
-		Um den Sortierprozess fertig zu stellen ist es noch notwendig, alle Buckets zu sortieren.
+		Um den Sortierprozess fertigzustellen ist es noch notwendig, alle Buckets zu sortieren.
 		In dieser Implementierung geschiet dies zusammen mit dem verteilen auf die Buckets.
 		Zur Art und Weise, wie die Buckets sortiert werden, gibt es allerdings 2 Überlegungen:
 		\subsubsection{Original}
 			Im Original \autocite{frazer-1970} wird Quicksort verwendet, um die Buckets zu sortieren.
 			Der zugrundeliegende Gedanke ist, dass, durch das initiale gleichmäßige verteilen der Elemente, jeder Prozessorkern nun annähernd gleich viele Elemente bearbeiten soll.\\
-			Auch wenn im Original Quicksort verwendet wird, so wird dieser Gedanke auch von jeglichem Divide-and-Conquer Algorithmus mit einer durchschnittlichen Laufzeit von annähernd $O(n\log{n})$\footnote{Diese Angabe ist ein Richtwert. Vorausgesetzt es gibt sinnvolle Gründe, wie das verringern von Vergleichen, kann es sinnvoll sein, diese Laufzeitkomplexität auch im größeren Maße zu überschreiten.} umgesetzt. 
+			Auch wenn im Original Quicksort verwendet wird, so wird dieser Gedanke auch von jeglichem Divide-and-Conquer Algorithmus mit einer durchschnittlichen Laufzeit von annähernd $O(n\log{n})$\footnote{Diese Angabe ist ein Richtwert. Vorausgesetzt es gibt sinnvolle Gründe, wie das Verringern von Vergleichen, kann es sinnvoll sein, diese Laufzeitkomplexität auch im größeren Maße zu überschreiten.} umgesetzt. 
 		\subsubsection{Rekursiv}
 			Dem entgegen steht die rekursive Implementierung.
 			Diese ist auch in \ref{fig:skeletton} umgesetzt.\\
