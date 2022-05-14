@@ -1,5 +1,5 @@
 \section{Mathematische Eigenschaften}
-	Wie die meisten Sortieralgorithmen ist Samplesort mathematisch darstellbar.
+	Wie die meisten Algorithmen ist Samplesort mathematisch darstellbar.
 	Hierbei gibt es viele Perspektiven.
 	Im Folgenden ist die Laufzeit- und Speicherkomplexität dargestellt.
 	
@@ -9,18 +9,23 @@
 		Soweit die Theorie zur Standardvariante.
 		Anders ist es beim Super Scalar Sample Sort (sss-Sort). \autocite{sanders-2004} 
 		Dieser benötigt einen 2. temporären Array mit n Elementen und damit doppelt so viel Speicher.
-		An der Speicherkomplexität ändert sich damit allerdings nichts, diese bleibt bei $\Theta(n)$.
+		An der Speicherkomplexität ändert sich damit allerdings nichts, diese bleibt bei $\Theta(n)$.\\
+		Jedoch sind auch andere Möglichkeiten denkbar, die Speicher nutzen, um die Laufzeit zu begünstigen.
+		Im Regelfall ist dies allerdings nicht von vorteil, da große Datenmengen meist nicht im RAM alleine gehandhabt werden können.
+		Also müssen die dateen konstant zwischen virtuellem RAM, also Speicher auf einer Festplatte, und dem hardware RAM hin und her bewegt werden.
+		Diesen Vorgang gildt es in jedem Fall zu vermeiden.
+
 	\subsection{Laufzeitkomplexität}
 		Ein häufig verwendetes Maß für die Performanz eines Sortieralgorithmus sind die benötigten vergleiche.
 		Diese Differenzierung ist wichtig, da verschiedene Operationen\footnote{Im Regelfall Vergleichsoperationen und Speicherzugriffe}, bei unterschiedlichen Datenmodellen, unterschiedlich gewichtet Zeit, bzw. Prozessoroperationen, benötigen.
 		Wenn, wie in \ref{sec:implementation}, lediglich Integer verglichen werden\footnote{In der Regel benötigt diese Operation lediglich so viel Zeit, wie eine Subtraktionsoperation}, so ist die benötigte Zeit vernachlässigbar.
-		Allerdings tritt ein Problem mit dem sogenannten Conditional branches, also den bedingten Abzweigungen der Byte~code~instruktionen, auf:
+		Allerdings tritt ein Problem mit den sogenannten Conditional branches, also den bedingten Abzweigungen der Byte~code~instruktionen, auf:
 		Werden die Anweisungen in das Register, also den Anweisungscache, des Prozessors geladen, so ist die Wahrscheinlichkeit für jede Abzweigung, also jedes Ergebnis der Vergleichsoperation, bei $n\log{n}$\footnote{Da jedes Element transitiv mit jedem anderen verglichen wird} vergleichen, annähernd $50\%$.
 		Damit kann keine Sinnvolle Annahme getroffen werden, welche Instruktionen in das Register geladen werden sollen.
 		Wird der falsche Zweig genommen, so muss die Operation wiederholt werden und wenn alle Möglichkeiten geladen werden, wird für jeden Abzweig die Last verdoppelt. \autocite{sanders-2004}\\
 		Damit ist es dennoch in unserem Interesse, die Anzahl der vergleiche gering zu halten, außer dieses Problem wird, mit der parallelisierung der Vergleiche, durch sss-Sort umgangen.
 		
-		\paragraph{Sortierren der Sample}
+		\paragraph{Sortieren der Sample}
 			Beim Sortieren der Sample werden $C_\textit{smallSort}(s)$ vergleiche benötigt, wobei $C_\textit{smallSort}(n)$ die Funktion der Vergleiche von \textit{smallSort} ist, und $s$ die Größe der Sample.
 			Für Quicksort gilt durchschnittlich $C_\textit{smallSort}(n)=n\log{n}$. \autocite{wikipedia-contributors-2022A}
 			
