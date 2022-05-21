@@ -20,3 +20,6 @@ paper/*.log
 *.fls
 *.synctex.gz
 *.lof
+
+# Office
+~$*.*
