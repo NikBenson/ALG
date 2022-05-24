@@ -2,7 +2,7 @@
 	\label{sec:implementation}
 	Es gibt viele verschiedene Variationen, Samplesort zu implementieren.
 	Um ein viel genutztes Beispiel zu nennen, die Implementierung von \textit{std::sort} der C++ Standardbibliothek. \autocite{unknown-author-2019}
-	Diese Implementierung gildt als eine der schnellsten Samplesort Implementierungen, ist allerdings nicht parallelisiert.
+	Diese Implementierung gilt als eine der schnellsten Samplesort Implementierungen, ist allerdings nicht parallelisiert.
 	Dem entgegen steht die Implementierung von STAPL, die parallelisierte Standartbibliothek. \autocite{berlin-2007}\\
 	Diese Varianten fördern allerdings nicht das Verständnis, weshalb wir uns mit einer eigenen Implementierung auseinandersetzen werden.
 	Dazu sind zunächst ein paar Grundbegriffe notwendig:
@@ -13,7 +13,7 @@
 		Während Quicksort die Daten mit dem Pivot Element in 2 Sektionen unterteilt, da binär die einfachste Aufteilungsmöglichkeit ist, wenn die Anzahl irrelevant ist, unterteilt Samplesort die Daten mit $n$ Splittern in $n+1$ Buckets.
 	\paragraph{Bucket}
 		Ein Bucket ist der Bereich zwischen zwei benachbarten Splittern, so wie die beiden Bereiche neben dem größten sowie kleinsten Splitter.
-		Dies ist in \ref{fig:buckets-from-splitters} am beispiel der Splitter 100, 200 \& 300 visuell dargestellt.
+		Dies ist in \ref{fig:buckets-from-splitters} am Beispiel der Splitter 100, 200 \& 300 visuell dargestellt.
 		\begin{figure}[h]
 			\caption{Buckets für Splitter \autocite{benson-2022}}
 			\label{fig:buckets-from-splitters}
@@ -106,7 +106,7 @@
 			Im Durchschnitt werden so genau die mittleren Splitter, die versucht werden, möglichst genau zu treffen, gefunden.
 			Allerdings, dadurch, dass dies vom Zufall abhängig ist, ist dies, abgesehen vom Oversampling, auch nur im Durchschnitt, der Fall.\\
 			Durch das Oversampling ist die Wahrscheinlichkeit, dass annähernd optimale Splitter ausgewählt werden, vorausgesetzt, es gibt nicht zu viele Duplikate, allerdings ziemlich hoch.
-			Um genau zu sein wiird die durchschnittliche distanz zu den optimalen Splittern durch den \textit{oversamplingFactor} geteilt.\\
+			Um genau zu sein wird die durchschnittliche distanz zu den optimalen Splittern durch den \textit{oversamplingFactor} geteilt.\\
 			Auch steigt die Laufzeit auf $O(n\cdot O_R)$.\footnote{Zur veranschaulichung, technisch ist dies immer noch eine Laufzeit von $O(n)$}
 
 			\paragraph{Equality buckets}
@@ -119,21 +119,21 @@
 
 	\subsection{Zuordnen jeden Wertes zu dem passenden Bucket}
 		\lstinputlisting[language=C, caption={Finden des richtigen Buckets \autocite{benson-2022}}, label=fig:place_elements_in_appropriate_bucket]{../code/src/samplesort/place_elements_in_corresponding_bucket.c}
-		Nun gildt es, die Elemente den Buckets zuzuordnen.
-		Für einen Array gibt es keine möglichkeit, dies in einer Iteration zu realisieren.
+		Nun gilt es, die Elemente den Buckets zuzuordnen.
+		Für einen Array gibt es keine Möglichkeit, dies in einer Iteration zu realisieren.
 		Begründet wird dies dadurch, dass die tatsächliche Größe der Buckets noch nicht bekannt ist.\\
 		Deshalb wird derselbe Algorithmus wie beim klassischen Quicksort verwendet:
-		Es werden die Elemente an jedem Splitter einzeln auf beide Seiten verteilt und dann wird der Algorithmus für beide seiten wiederholt.
-		Das Übernehmen der Splitter in die nächste Iteration ist hier in den ersten beiden Schleifen realisiert, in dem die Splitter am anfang bzw. ende der beiden Hälften positioniert werden.
-		Um diesen Aufwand zu vermeiden ist es auch denkbar, zunächst mit dem letzten splitter zu starten, damit die splitter am anfang des Arrays nicht bewegt werden müssen.
-		Oder es kann ganz vermiden werden, wenn auf eine in-place implementierung verzichtet wird.\\
-		Hier ist allerdings ein rekursiver Ansatz gewählt, der von der mitte zum rand arbeitet.
-		So kann der Sotrtierprozess für jeden Bucket angestoßen werden, sobald eine Hälfte keine Splitter mehr beinhaltet.\\
+		Es werden die Elemente an jedem Splitter einzeln auf beide Seiten verteilt und dann wird der Algorithmus für beide Seiten wiederholt.
+		Das Übernehmen der Splitter in die nächste Iteration ist hier in den ersten beiden Schleifen realisiert, in dem die Splitter am Anfang bzw. ende der beiden Hälften positioniert werden.
+		Um diesen Aufwand zu vermeiden ist es auch denkbar, zunächst mit dem letzten Splitter zu starten, damit die Splitter am Anfang des Arrays nicht bewegt werden müssen.
+		Oder es kann ganz vermieden werden, wenn auf eine in-place Implementierung verzichtet wird.\\
+		Hier ist allerdings ein rekursiver Ansatz gewählt, der von der Mitte zum Rand arbeitet.
+		So kann der Sortierprozess für jeden Bucket angestoßen werden, sobald eine Hälfte keine Splitter mehr beinhaltet.\\
 		Daraus ergeben sich $n\log_2s$ vergleiche so wie Austausch Operationen, was einer Laufzeitkomplexität von $\Theta(n\log{s})$ entspricht.\footnote{$n$ ist die Anzahl der Elemente und $s$ die Anzahl der Splitter}
 
 	\subsection{Sortieren der Buckets}
 		Um den Sortierprozess fertigzustellen ist es noch notwendig, alle Buckets zu sortieren.
-		In dieser Implementierung geschiet dies zusammen mit dem verteilen auf die Buckets.
+		In dieser Implementierung geschieht dies zusammen mit dem verteilen auf die Buckets.
 		Zur Art und Weise, wie die Buckets sortiert werden, gibt es allerdings 2 Überlegungen:
 		\subsubsection{Original}
 			Im Original \autocite{frazer-1970} wird Quicksort verwendet, um die Buckets zu sortieren.
