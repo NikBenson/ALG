@@ -51,7 +51,7 @@
 	\subsection{Auswahl der Splitter}
 		Das Ziel bei der Auswahl der Splitter ist, dass möglichst gleich große Buckets entstehen.
 		\lstinputlisting[language=C, caption={Auswahl der Splitter \autocite{benson-2022}}, label=fig:select_splitters]{../code/src/samplesort/select_splitters.c}
-		Zunächst wird eine Sample, also eine Repr"asentative Teilmenge der gesamt Daten, gebildet.
+		Zunächst wird eine Sample, also eine Repräsentative Teilmenge der gesamt Daten, gebildet.
 		Diese wird sortiert und die Splitter werden in gleichmäßigen Abständen aus der sortierten Sample entnommen.\\
 		\begin{figure}[h]
 			\caption{Ermitteln der Splitter aus der sortierten Sample \autocite{benson-2022}}
@@ -63,9 +63,9 @@
 				\end{tabular}
 			\end{center}
 		\end{figure}\\
-		Ist die Sample hinreichend repr"asentativ, so folgt daraus, dass die resultierenden Splitter die Daten in annähernd identisch große Buckets unterteilt.\\
+		Ist die Sample hinreichend repräsentativ, so folgt daraus, dass die resultierenden Splitter die Daten in annähernd identisch große Buckets unterteilt.\\
 		Dieser Prozess nennt sich \textbf{Oversampling}.
-		Er leitet sich aus dem "Median of 3 Quicksort" ab.
+		Er leitet sich aus dem \qq{Median of 3 Quicksort} ab.
 		Es werden mehr Splitter/Pivot Elemente generiert, damit aus ihnen die optimalen ausgewählt werden können (Siehe \ref{fig:splitters-from-sample}).\\
 		Die größe der Sample ergibt sich dabei aus der Formel $(\textit{splittersCount}-1)\cdot\textit{oversamplingFactor}+1$.
 		Dieses Implementierungsdetail ergibt sich daraus, dass das erste Element jedes Blocks als Splitter genommen wird und lediglich das erste Element des letzten Blocks benötigt wird. (Die Roten Elemente in \ref{fig:splitters-from-sample} sind überflüssig.)
