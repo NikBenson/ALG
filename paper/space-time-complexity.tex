@@ -6,14 +6,14 @@
 	\subsection{Speicherkomplexität}
 		Samplesort ist ein in-place Sortieralgorithmus.
 		Das heißt, es wird kein zusätzlicher Speicher benötigt.\\
-		Soweit die Theorie zur Standardvariante.
+		Soweit die Theorie zur Standard Variante.
 		Anders ist es beim Super Scalar Sample Sort (sss-Sort). \autocite{sanders-2004} 
 		Dieser benötigt einen 2. temporären Array mit n Elementen und damit doppelt so viel Speicher.
 		An der Speicherkomplexität ändert sich damit allerdings nichts, diese bleibt bei $\Theta(n)$.\\
 		Jedoch sind auch andere Möglichkeiten denkbar, die Speicher nutzen, um die Laufzeit zu begünstigen.
-		Im Regelfall ist dies allerdings nicht von vorteil, da große Datenmengen meist nicht im RAM alleine gehandhabt werden können.
-		Also müssen die dateen konstant zwischen virtuellem RAM, also Speicher auf einer Festplatte, und dem hardware RAM hin und her bewegt werden.
-		Diesen Vorgang gildt es in jedem Fall zu vermeiden.
+		Im Regelfall ist dies allerdings nicht von Vorteil, da große Datenmengen meist nicht im RAM alleine gehandhabt werden können.
+		Also müssen die dateen konstant zwischen virtuellem RAM, also Speicher auf einer Festplatte, und dem Hardware RAM hin und her bewegt werden.
+		Diesen Vorgang gilt es in jedem Fall zu vermeiden.
 
 	\subsection{Laufzeitkomplexität}
 		Ein häufig verwendetes Maß für die Performanz eines Sortieralgorithmus sind die benötigten vergleiche.
@@ -34,7 +34,7 @@
 		
 		\paragraph{Verteilen auf Buckets}
 			Das Verteilen auf die Buckets ist an sich bereits ein Divide-And-Conquer-Algorithmus.
-			Seien $s$ die Anzahl der Splitter und $n$ die Anzahl der Elemente, die keine Splitter sind, so lässt sich folgende Rekursionsgleichung\footnote{Auch bekannt als Differenzengleichung} ableiten, vorausgesetzt $s,n\in \left\{ \mathbb{N}\to 2^n \right\}$, also $s$ und $n$ Potenzen von 2 sind:
+			Seien $s$ die Anzahl der Splitter und $n$ die Anzahl der Elemente, die keine Splitter sind, so lässt sich folgende Rekursionsgleichung\footnote{Auch bekannt als Differenzialgleichung} ableiten, vorausgesetzt $s,n\in \left\{ \mathbb{N}\to 2^n \right\}$, also $s$ und $n$ Potenzen von 2 sind:
 			\begin{equation}
 				C_{s,n}=n+2\cdot C_{\frac{s-1}{2}, \frac{n}{2}}\ \text{für $s>1$ mit}\ C_{1,n}=n
 			\end{equation}

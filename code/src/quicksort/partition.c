@@ -1,6 +1,6 @@
-#include "divide_data_from_pivot.h"
+#include "partition.h"
 
-int *divideDataFromPivot(Array data, void *pivot, Comparator compare, Swapper swap) {
+int *partition(Array data, void *pivot, Comparator compare, Swapper swap) {
     int *i = data.start;
     int *j = data.end - 1;
 

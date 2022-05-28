@@ -15,7 +15,7 @@
 			\item Vergleiche\\
 				Samplesort erzielt durch die geschickte Auswahl der Splitter im Durchschnitt 15\% weniger vergleiche.
 				Dies ist für die Laufzeit besonders wichtig, da dies Branching bei der Pipline von Prozessoren verhindert.
-				Optimal wird dieses Problem von Super-Scalar-Samplesort umgangen durch die Parallelisierung von diesen Vergleichsoperationen, allerdings muss diese Variante abstriche machen, da sie nicht In-Place ist.
+				Optimal wird dieses Problem von Super-Scalar-Samplesort umgangen durch die Parallelisierung von diesen Vergleichsoperationen, allerdings muss diese Variante Abstriche machen, da sie nicht In-Place ist.
 			\item Multithreading\\
 				Auf Systemen mit mehreren Prozessoren, ist Samplesort besonders performant, wenn die Anzahl der Buckets gleich der Anzahl der Prozessoren (bzw. Prozessorkerne) ist.
 				Dadurch, dass die Buckets annähernd identisch groß sind, haben auch die einzelnen Prozessoren eine annähernd identische Last.
@@ -36,5 +36,5 @@
 		Diese Frage hat keine eindeutige Antwort, doch sie lässt sich von den Vor- und Nachteilen ableiten.\\
 		Für große, potenziell entartete, Daten, bietet sich Samplesort an, wenn wenige vergleiche wichtig sind.
 		Ein Beispiel hierfür sind Dateien mit JSON Objekten, da diese nicht in großen Mengen im RAM gespeichert werden können.\\
-		Auf der anderen Seite stehen parallele Systeme. Hier bietet die gleichmäßige Verteilung, auch für GPUs, einen entscheidenen Vorteil, der Samplesort besonders performant macht.\\
+		Auf der anderen Seite stehen parallele Systeme. Hier bietet die gleichmäßige Verteilung, auch für GPUs, einen entschiedenen Vorteil, der Samplesort besonders performant macht.\\
 		Grundsätzlich immer bei parallelen Systemen, dazu zählen auch verteilte Systeme, ist Samplesort ein Gedanke, mit dem sich betroffene beschäftigen sollten.

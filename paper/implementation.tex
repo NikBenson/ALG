@@ -20,22 +20,23 @@
 			\begin{center}
 				\begin{math}
 					\begin{matrix}
-								 & 100 &          & 200 &          & 300 &          \\
+						 \ldots  & 100 &  \ldots  & 200 &  \ldots  & 300 &  \ldots  \\
 						\uparrow &     & \uparrow &     & \uparrow &     & \uparrow \\
 					\end{matrix}
 				\end{math}
 			\end{center}
 		\end{figure}\\
-		Wichtig ist dabei, dass Elemente, die denselben Wert, wie ein Splitter haben, entweder in den Bucket links, oder rechts, von jenem, eingeordnet werden können.\\
-		Das Ziel ist dabei häufig, die Anzahl der Buckets identisch zur Anzahl der verfügbaren Prozessorkerne zu setzen, damit die Buckets parallel sortiert werden.
+		Ein Sonderfall sind dabei Elemente, die den selben Wert wie ein Splitter haben.
+		Für sie ist nicht definiert, ob sie in den Bucket links oder rechts des Splitters ein zu ordnen sind.\\
+		Das Ziel von Buckets ist dabei häufig, die Anzahl der Buckets identisch zur Anzahl der verfügbaren Prozessorkerne zu setzen, damit die Buckets parallel sortiert werden.
 		Dies ist in \ref{sec:multithreading} weiter ausgeführt.
 
 	\subsection{Phasen des Algorithmus}
 		Der grundlegende Aufbau ist dabei immer identisch und in \ref{fig:skeletton} beispielhaft dargestellt:
 		\lstinputlisting[language=C, caption={Samplesort Implementierung \autocite{benson-2022}}, label=fig:skeletton]{../code/src/samplesort/samplesort.c}
-		Zu erkennen sind 3 phasen, denen im folgenden auch jeweils eine Überschrift gewidmet ist:
+		Zu erkennen sind 3 Phasen, denen im folgenden auch jeweils eine Überschrift gewidmet ist:
 		\begin{enumerate}
-			\item Auswählen von $\textit{bucketsCount}-1$ splittern
+			\item Auswählen von $\textit{splittersCount}$ Splittern
 			\item Zuordnen der Werte zu den sich daraus ergebenden Buckets
 			\item Sortieren der Buckets
 		\end{enumerate}
@@ -50,26 +51,24 @@
 	\subsection{Auswahl der Splitter}
 		Das Ziel bei der Auswahl der Splitter ist, dass möglichst gleich große Buckets entstehen.
 		\lstinputlisting[language=C, caption={Auswahl der Splitter \autocite{benson-2022}}, label=fig:select_splitters]{../code/src/samplesort/select_splitters.c}
-		Zunächst wird eine Sample, also eine Representative Teilmenge der gesamtdaten, gebildet.
+		Zunächst wird eine Sample, also eine Repr"asentative Teilmenge der gesamt Daten, gebildet.
 		Diese wird sortiert und die Splitter werden in gleichmäßigen Abständen aus der sortierten Sample entnommen.\\
 		\begin{figure}[h]
 			\caption{Ermitteln der Splitter aus der sortierten Sample \autocite{benson-2022}}
 			\label{fig:splitters-from-sample}
 			\begin{center}
-				\begin{math}
-					\begin{matrix}
-							1    & 1 & 2 &     3    & 5 & 8 &    13    & 21 & 34 &    55    \\
-						\uparrow &   &   & \uparrow &   &   & \uparrow &    &    & \uparrow \\
-					\end{matrix}
-				\end{math}
+				\begin{tabular}{ c c c c c c c c c c c c }
+						 1     & 1 & 2 &      3     & 5 & 8 &     13     & 21 & 34 &     55     & {\color{red} 89} & {\color{red} 144} \\
+					$\uparrow$ &   &   & $\uparrow$ &   &   & $\uparrow$ &    &    & $\uparrow$ &                  &
+				\end{tabular}
 			\end{center}
 		\end{figure}\\
-		Ist die Sample hinreichend representativ, so folgt daraus, dass die resultierenden Splitter die Daten in annähernd identisch große Buckets unterteilt.\\
+		Ist die Sample hinreichend repr"asentativ, so folgt daraus, dass die resultierenden Splitter die Daten in annähernd identisch große Buckets unterteilt.\\
 		Dieser Prozess nennt sich \textbf{Oversampling}.
-		Er leitet sich aus dem Median of 3 Quicksort ab.
+		Er leitet sich aus dem "Median of 3 Quicksort" ab.
 		Es werden mehr Splitter/Pivot Elemente generiert, damit aus ihnen die optimalen ausgewählt werden können (Siehe \ref{fig:splitters-from-sample}).\\
 		Die größe der Sample ergibt sich dabei aus der Formel $(\textit{splittersCount}-1)\cdot\textit{oversamplingFactor}+1$.
-		Dieses Implementierungsdetail ergibt sich daraus, dass das erste Element jedes Blocks als Splitter genommen wird und lediglich das erste Element des letzten Blocks benötigt wird.
+		Dieses Implementierungsdetail ergibt sich daraus, dass das erste Element jedes Blocks als Splitter genommen wird und lediglich das erste Element des letzten Blocks benötigt wird. (Die Roten Elemente in \ref{fig:splitters-from-sample} sind überflüssig.)
 		Dieses Detail ist dennoch wichtig, da viele Vergleiche beim Sortieren der Sample gespart werden.\\
 		Die Auswahl der Sample kann dabei auf 4 verschiedene Arten erfolgen:\footnote{Sortiert von schnellster Laufzeit zu größter Randomisierung} \autocite{berlin-2007}
 
@@ -87,7 +86,7 @@
 			Bei diesem Verfahren werden gleich verteilt Elemente aus den Daten gewählt, in dem jedes $\textit{dataLength}/\textit{sampleLength}$-te Element der Sample hinzugefügt wird.\\
 			Mit einer Laufzeit von $O(n)$ ist dieses Verfahren schneller als zufällige Verfahren, da keine zufälligen Zahlen generiert werden müssen.
 			Auch werden sowohl bei zufälligen, als auch bei vollständig sortierten Daten, passende Splitter gefunden.
-			Allerdings entfällt das Zufallselement, was den Algorithmus anfälliger für bestimmte vorhandene Strukturen macht.
+			Allerdings entfällt das Zufalls-Element, was den Algorithmus anfälliger für bestimmte vorhandene Strukturen macht.
 			Das Risiko zu entarten ist allerdings in den meisten Anwendungsfällen nicht relevant.
 			Deshalb ist dies die häufigste Implementierung.
 
@@ -106,16 +105,16 @@
 			Im Durchschnitt werden so genau die mittleren Splitter, die versucht werden, möglichst genau zu treffen, gefunden.
 			Allerdings, dadurch, dass dies vom Zufall abhängig ist, ist dies, abgesehen vom Oversampling, auch nur im Durchschnitt, der Fall.\\
 			Durch das Oversampling ist die Wahrscheinlichkeit, dass annähernd optimale Splitter ausgewählt werden, vorausgesetzt, es gibt nicht zu viele Duplikate, allerdings ziemlich hoch.
-			Um genau zu sein wird die durchschnittliche distanz zu den optimalen Splittern durch den \textit{oversamplingFactor} geteilt.\\
-			Auch steigt die Laufzeit auf $O(n\cdot O_R)$.\footnote{Zur veranschaulichung, technisch ist dies immer noch eine Laufzeit von $O(n)$}
+			Um genau zu sein wird die durchschnittliche Distanz zu den optimalen Splittern durch den \textit{oversamplingFactor} geteilt.\\
+			Auch steigt die Laufzeit auf $O(n\cdot O_R)$.\footnote{Zur Veranschaulichung, technisch ist dies immer noch eine Laufzeit von $O(n)$}
 
 			\paragraph{Equality buckets}
 				Gibt es viele gleichwertige Elemente müssen viele vermeidbare Vergleiche durchgefürt werden.
 				Hier helfen Equality buckets.\\
-				Die wahrscheinlichkeit, dass Elemente, die häufig vorkommen, als Splitter ausgewählt werden, ist am größten.
-				Deshalb bilden, bei einer Implementierung mit Equality Buckets, die Splitter jewails einen eigenen bucket, der nur gleichwertige Elemente fasst.
+				Die Wahrscheinlichkeit, dass Elemente, die häufig vorkommen, als Splitter ausgewählt werden, ist am größten.
+				Deshalb bilden, bei einer Implementierung mit Equality Buckets, die Splitter jewails einen eigenen bucket, der nur gleichwertige Elemente fast.
 				Daraus resultiert, dass die gleichwertigen Elemente schnell aus dem Weg geräumt werden.\\
-				Die Beispielimplementierung hat keine Equality Buckets.
+				Die Beispiel-Implementierung hat keine Equality Buckets.
 
 	\subsection{Zuordnen jeden Wertes zu dem passenden Bucket}
 		\lstinputlisting[language=C, caption={Finden des richtigen Buckets \autocite{benson-2022}}, label=fig:place_elements_in_appropriate_bucket]{../code/src/samplesort/place_elements_in_corresponding_bucket.c}

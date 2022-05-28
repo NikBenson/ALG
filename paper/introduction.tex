@@ -26,10 +26,15 @@
 	\subsection{Was ist Samplesort?}
 		Bei all diesen Kriterien schneidet Quicksort im Schnitt am besten ab, stößt aber auch schnell an seine Grenzen. 
 		Sind die Daten in umgekehrter sortierter Reihenfolge vorhanden, so steigert sich seine Laufzeit von durchschnittlich $O(n\log{n})$ auf $\Omega(n^2)$ (Entartung).\\
+		\begin{figure}
+			\caption{Laufzeitkomplexitäten \autocite{unknown-author-2021}}
+			\centering
+			\includegraphics[width=\paperwidth-2in]{bigo.jpeg}
+		\end{figure}
 		Dieser Fall erscheint zunächst selten, doch wenn, zum Beispiel, neue Nutzerdaten jeden Tag um Mitternacht neu in eine strukturierte Datenbank übernommen werden sollen, ist dies häufig der Fall.\\
 		Heapsort kann hier, mit einer Laufzeit von $\Theta(n\log{n})$ Abhilfe schaffen, ist aber im Schnitt langsamer als Quicksort.\\
 		Samplesort ist eine Generalisierung von Quicksort:\\
-		Während Quicksort ein Pivot Element hat, hat Samplesort $p$ Pivot Elemente, auch Splitter genannt, wobei diese zufällig ausgewählt werden.
+		Während Quicksort ein Pivot Element hat\footnote{Hier ein Link für eine anschauliche Erklärung: \hyperlink{https://www.youtube.com/watch?v=0SkOjNaO1XY}{https://www.youtube.com/watch?v=0SkOjNaO1XY}}, hat Samplesort $p$ Pivot Elemente, auch Splitter genannt, wobei diese zufällig ausgewählt werden.
 		Dadurch benötigt Samplesort im Schnitt 15\% weniger Vergleiche als Quicksort. \autocite{frazer-1970}
 		Außerdem ist Samplesort für Systeme mit mehreren Prozessorkernen ausgelegt.
 		So wird $p$ meistens als die Anzahl von Kernen - 1 definiert und durch die zufällige Auswahl der Splitter hat jeder Kern eine annähernd identische Last und der Algorithmus kann den vollen Prozessor nutzen, um schneller fertig zu werden.\\

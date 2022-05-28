@@ -19,6 +19,10 @@
 \usepackage{geometry}
 \geometry{a4paper, margin=1in}
 
+\usepackage{graphicx}
+\usepackage{chngpage}
+\usepackage{calc}
+
 \usepackage[backend=biber,style=iso-authoryear]{biblatex}
 \bibliography{bibliography}
 
@@ -86,6 +90,7 @@
 	\include{space-time-complexity}
 	\include{conclusion}
 
+    \pagenumbering{roman}
 	\addcontentsline{toc}{section}{Quellenverzeichnis}
 	\printbibliography
 
