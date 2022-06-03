@@ -12,7 +12,7 @@
 		An der Speicherkomplexität ändert sich damit allerdings nichts, diese bleibt bei $\Theta(n)$.\\
 		Jedoch sind auch andere Möglichkeiten denkbar, die Speicher nutzen, um die Laufzeit zu begünstigen.
 		Im Regelfall ist dies allerdings nicht von Vorteil, da große Datenmengen meist nicht im RAM alleine gehandhabt werden können.
-		Also müssen die dateen konstant zwischen virtuellem RAM, also Speicher auf einer Festplatte, und dem Hardware RAM hin und her bewegt werden.
+		Also müssen die Daten konstant zwischen virtuellem RAM, also Speicher auf einer Festplatte, und dem Hardware RAM hin und her bewegt werden.
 		Diesen Vorgang gilt es in jedem Fall zu vermeiden.
 
 	\subsection{Laufzeitkomplexität}
@@ -23,7 +23,7 @@
 		Werden die Anweisungen in das Register, also den Anweisungscache, des Prozessors geladen, so ist die Wahrscheinlichkeit für jede Abzweigung, also jedes Ergebnis der Vergleichsoperation, bei $n\log{n}$\footnote{Da jedes Element transitiv mit jedem anderen verglichen wird} vergleichen, annähernd $50\%$.
 		Damit kann keine sinnvolle Annahme getroffen werden, welche Instruktionen in das Register geladen werden sollen.
 		Wird der falsche Zweig genommen, so muss die Operation wiederholt werden und wenn alle Möglichkeiten geladen werden, wird für jeden Abzweig die Last verdoppelt. \autocite{sanders-2004}\\
-		Damit ist es dennoch in unserem Interesse, die Anzahl der vergleiche gering zu halten, außer dieses Problem wird, mit der parallelisierung der Vergleiche, durch sss-Sort umgangen.
+		Damit ist es dennoch in unserem Interesse, die Anzahl der vergleiche gering zu halten, außer dieses Problem wird, mit der Parallelisierung der Vergleiche, durch sss-Sort umgangen.
 		
 		\paragraph{Sortieren der Sample}
 			Beim Sortieren der Sample werden $C_\textit{smallSort}(s)$ vergleiche benötigt, wobei $C_\textit{smallSort}(n)$ die Funktion der Vergleiche von \textit{smallSort} ist, und $s$ die Größe der Sample.
@@ -86,7 +86,7 @@
 			\begin{enumerate}
 				\item Quicksort bei entarteten Daten eine Laufzeit von $O\left(n^2\right)$ hat.
 					Dies ist bei Samplesort nur bei einigen Implementierungen der Fall, wenn alle Elemente identisch sind.
-					Hier können Equality Buckets abhilfe schaffen.
+					Hier können Equality Buckets Abhilfe schaffen.
 				\item das teilen durch $p$ eine Vereinfachung ist, da nicht jeder Bucket gleich groß ist.
 					Allerdings ist die Standardabweichung, zum einen, abgesicherter gegen entartete Daten, und zum anderen deutlich geringer durch das Sampling.
 			\end{enumerate}
