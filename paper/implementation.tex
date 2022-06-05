@@ -149,19 +149,19 @@
 			Die Entscheidung sollte von der Größe des Schwellenwerts getrieben sein.
 	
 	\subsection{Beispiel}
-		Zur Veranschaulichung werden im Folgenden die Werte $\{28,1,13,0,5,34,21,1,55,3\}$ mit Samplesort sortiert.
-		Dazu werden 3 Splitter mit einem oversampling von 2 mit dem Block verfahren gewählt.
+		Zur Veranschaulichung werden im Folgenden die Werte $\{8,1,13,0,2,34,21,1,5,3\}$ mit Samplesort sortiert.
+		Dazu werden 3 Splitter mit einem Oversampling von 2 mit dem Block verfahren gewählt.
 		Die Größe der Sample ist damit $(3-1)*2+1=5$.
-		Mit dem Block Verfahren sind das die ersten 5 Elemente, also $\{28,1,13,0,5\}$.
-		Diese Sample wird nun sortiert, beispielsweise mit Quicksort: $\{0,1,5,13,28\}$.
-		Es ergeben sich die Splitter $\{0,5,28\}$ aus den Elementen mit größtmöglichem Abstand, also einer Schrittweite vom oversampling Faktor (2).
+		Mit dem Block Verfahren sind das die ersten 5 Elemente, also $\{8,1,13,0,2\}$.
+		Diese Sample wird nun sortiert, beispielsweise mit Quicksort: $\{0,1,2,8,13\}$.
+		Es ergeben sich die Splitter $\{0,2,13\}$ aus den Elementen mit größtmöglichem Abstand, also einer Schrittweite vom oversampling Faktor (2).
 		Nun werden die Daten auf die Buckets verteilt, indem der Partitionierungsalgorithmus vom Quicksort wiederholt angewendet wird.
-		Angefangen mit der 28 folgt nach der ersten Iteration: $\{{\color{red}0},{\color{red}5},1,13,0,21,1,3,{\color{green}28},34,55\}$.
-		So fällt der Bereich nach der 28 raus und die Splitter bleiben an der selben position.
-		Deshalb folgt ohne Umwege die zweite Iteration, die 5: $\{{\color{red}0},1,1,3,{\color{green}5},13,21,{\color{green}28},34,55\}$.
-		Damit erübrigt sich das Restproblem durch die normale Anwendung des Algorithmus auf den Bereich links der 5: $\{{\color{green}0},1,1,3,{\color{green}5},13,21,{\color{green}28},34,55\}$.
+		Angefangen mit der 28 folgt nach der ersten Iteration: $\{{\color{red}0},{\color{red}2},8,1,3,5,1,{\color{green}13},21,34\}$.
+		So fällt der Bereich nach der 28 raus und die Splitter bleiben an der selben Position.
+		Deshalb folgt ohne Umwege die zweite Iteration, die 5: $\{{\color{red}0},1,1,{\color{green}2},3,5,8,{\color{green}13},21,34\}$.
+		Damit erübrigt sich das Restproblem durch die normale Anwendung des Algorithmus auf den Bereich links der 5: $\{{\color{green}0},1,1,{\color{green}2},3,5,8,{\color{green}13},21,34\}$.
 		Da der Oversampling Faktor zu klein war, ist der erste Bucket nun leer geblieben.
 		Da Samplesort aber bei der Datenmenge überdimensioniert ist, ist dies der Zweckentfremdung für dieses Beispiel geschuldet.
 		Die Splitter sind nun an der richtigen Stelle, nun können die einzelnen Buckets, in diesem Beispiel unter der Verwendung von Quicksort, auf 4 verschiedenen Prozessorkernen sortiert werden.
 		Die Bucket Expansion ist durch Rundungsfehler dennoch 1, da die durchschnittliche Bucketgröße, berechnet durch $\ceil{10/4}=\ceil{2.5} =3$, equivalent zur größe des größten Buckets ist.
-		So ergibt sich nach einer Laufzeit von $O(3\cdot\log 3)$ der sortierte Array $\{0,1,1,2,3,5,8,13,21,34,55\}$.
+		So ergibt sich nun nach einer Laufzeit von $O(3\cdot\log 3)$ der sortierte Array $\{0,1,1,2,3,5,8,13,21,34,55\}$.
